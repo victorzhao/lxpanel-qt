@@ -1,0 +1,4 @@
+[Project]
+Name=lxpanel-qt
+Manager=KDevCMakeManager
+VersionControl=kdevgit
