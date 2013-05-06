@@ -18,53 +18,41 @@
 */
 
 
-#ifndef LXPANEL_APPLET_H
-#define LXPANEL_APPLET_H
+#include "showdesktopapplet.h"
+#include <QToolButton>
 
-#include <QFrame>
-#include <QDomElement>
+using namespace Lxpanel;
 
-namespace Lxpanel {
-
-class Applet : public QObject {
-
-Q_OBJECT
-
-public:
-  explicit Applet(QWidget* parent = 0);
-  virtual ~Applet();
+ShowDesktopApplet::ShowDesktopApplet(QWidget* parent): Applet(parent) {
+  button_ = new QToolButton(parent);
+  button_->setToolTip(tr("Show desktop"));
+  button_->setText(tr("Show desktop"));
+  QIcon::setThemeName("elementary");
+  button_->setIcon(QIcon::fromTheme("user-desktop"));
+  //button_->setIconSize(QSize(32, 32));
+  button_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   
-  virtual QWidget* widget() = 0;
-
-  virtual void setPanelIconSize(int size) {
-  }
-
-  virtual void setPanelOrientation(Qt::Orientation orientation) {
-  }
-
-  virtual bool expand() {
-    return expand_;
-  }
-
-  virtual void setExpand(bool expand) {
-    expand_ = expand;
-  }
-
-  virtual bool loadSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual bool saveSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual void preferences() {
-  }
-  
-private:
-  bool expand_;
-};
-
+  connect(button_, SIGNAL(clicked(bool)), SLOT(onButtonClicked()));
 }
 
-#endif // LXPANEL_APPLET_H
+ShowDesktopApplet::~ShowDesktopApplet() {
+}
+
+void ShowDesktopApplet::onButtonClicked() {
+  
+}
+
+
+
+ShowDesktopAppletFactory::ShowDesktopAppletFactory() {
+  
+}
+
+
+ShowDesktopAppletFactory::~ShowDesktopAppletFactory() {
+  
+}
+
+Applet* ShowDesktopAppletFactory::create(QWidget* parent) {
+  return new ShowDesktopApplet(parent);
+}

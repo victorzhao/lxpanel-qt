@@ -20,10 +20,13 @@
 
 #include "panel.h"
 #include "applet.h"
+#include "appletfactory.h"
+#include "application.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QTimer>
+#include <QSpacerItem>
 
 #include <QX11Info>
 #include <X11/Xlib.h>
@@ -37,10 +40,18 @@ Panel::Panel():
   length_(100),
   lengthMode_(SizeModeAuto),
   QWidget(0) {
+
   setWindowFlags(windowFlags()|Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
   // FIXME: add proper window flags to make it skip task bar and toplevel?
 
+  // FIXME: this does not work at all
+  setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+
   layout_ = new QBoxLayout(QBoxLayout::LeftToRight, this);
+  // layout_ = new QHBoxLayout(this);
+  layout_->setMargin(0);
+  // layout_->setSizeConstraint(QLayout::SetNoConstraint);
+  setLayout(layout_);
 }
 
 Panel::~Panel() {
@@ -128,6 +139,20 @@ void Panel::onGeometryChanged() {
 // load an applet from a config file node.
 bool Panel::loadApplet(QDomElement& element) {
   QString applet_type = element.attribute("type");
+  Application* app = static_cast<Application*>(qApp);
+  AppletFactory* factory = app->appletFactory(applet_type);
+  if(factory) {
+    Applet* applet = factory->create(this);
+    if(applet) {
+      insertApplet(applet, -1);
+      qDebug("applet: %s is loaded", qPrintable(applet_type));
+    }
+    else
+      qDebug("error creating applet: %s", qPrintable(applet_type));
+  }
+  else {
+    qDebug("applet type: %s is unknown", qPrintable(applet_type));
+  }
   // qDebug("  load applet: %s", qPrintable(applet_type));
   /* TODO
   var applet = Applet.new_from_type_name(applet_type);
@@ -240,6 +265,9 @@ bool Panel::load(QDomElement& element) {
   Q_FOREACH(Applet * applet, applets_) {
 
   }
+
+  QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Preferred);
+  layout_->addSpacerItem(spacer);
   // update geometry
   recalculateGeometry();
 
@@ -282,8 +310,16 @@ bool Panel::save(QDomElement& element) {
 
 // insert an applet to the panel at a specified index
 void Panel::insertApplet(Applet* applet, int index) {
-  applet->setParent(this);
-  layout_->insertWidget(index, applet);
+  QWidget* appletWidget = applet->widget();
+  if(appletWidget) {
+    layout_->insertWidget(index, appletWidget, 0, Qt::AlignLeft|Qt::AlignVCenter);
+    appletWidget->show();
+    QRect rc = appletWidget->geometry();
+    qDebug("%d,%d,%d,%d", rc.x(), rc.y(), rc.width(), rc.height());
+  }
+  else {
+    // FIXME: handle errors?
+  }
 
   /*
   applet.set_panel_orientation(_orientation);
@@ -297,13 +333,16 @@ void Panel::insertApplet(Applet* applet, int index) {
 
 // move an applet to a new position specified by index
 void Panel::reorderApplet(Applet* applet, int new_pos) {
-  layout_->removeWidget(applet);
-  layout_->insertWidget(new_pos, applet);
+  QWidget* appletWidget = applet->widget();
+  if(appletWidget) {
+    layout_->removeWidget(appletWidget);
+    layout_->insertWidget(new_pos, appletWidget);
 
-  applets_.removeOne(applet);
-  applets_.insert(new_pos, applet);
+    applets_.removeOne(applet);
+    applets_.insert(new_pos, applet);
 
-  Q_EMIT appletReordered(applet, new_pos); // emit a signal
+    Q_EMIT appletReordered(applet, new_pos); // emit a signal
+  }
 }
 
 // remove an applet from the panel. this caused destruction
@@ -313,7 +352,8 @@ void Panel::removeApplet(Applet* applet) {
 
   if(pos != -1) {
     applets_.removeOne(applet);
-    layout_->removeWidget(applet);
+    QWidget* appletWidget = applet->widget();
+    layout_->removeWidget(appletWidget);
     delete applet; // FIXME: should we do this?
     Q_EMIT appletRemoved(applet, pos); // emit a signal
   }

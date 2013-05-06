@@ -18,53 +18,23 @@
 */
 
 
-#ifndef LXPANEL_APPLET_H
-#define LXPANEL_APPLET_H
+#ifndef LXPANEL_APPLETFACTORY_H
+#define LXPANEL_APPLETFACTORY_H
 
-#include <QFrame>
-#include <QDomElement>
+class QWidget;
 
 namespace Lxpanel {
 
-class Applet : public QObject {
+class Applet;
 
-Q_OBJECT
+// factory class used to generate new instances of applets
+class AppletFactory {
 
 public:
-  explicit Applet(QWidget* parent = 0);
-  virtual ~Applet();
-  
-  virtual QWidget* widget() = 0;
-
-  virtual void setPanelIconSize(int size) {
-  }
-
-  virtual void setPanelOrientation(Qt::Orientation orientation) {
-  }
-
-  virtual bool expand() {
-    return expand_;
-  }
-
-  virtual void setExpand(bool expand) {
-    expand_ = expand;
-  }
-
-  virtual bool loadSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual bool saveSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual void preferences() {
-  }
-  
-private:
-  bool expand_;
+  virtual Applet* create(QWidget* parent) = 0;
+  virtual ~AppletFactory();
 };
 
 }
 
-#endif // LXPANEL_APPLET_H
+#endif // LXPANEL_APPLETFACTORY_H

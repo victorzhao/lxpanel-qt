@@ -17,54 +17,50 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#ifndef LXPANEL_CLOCKAPPLET_H
+#define LXPANEL_CLOCKAPPLET_H
 
-#ifndef LXPANEL_APPLET_H
-#define LXPANEL_APPLET_H
+#include "../../appletfactory.h"
+#include "../../applet.h"
 
-#include <QFrame>
-#include <QDomElement>
+#include <QLabel>
+
+class QLabel;
+class QTimer;
 
 namespace Lxpanel {
 
-class Applet : public QObject {
-
-Q_OBJECT
+class ClockApplet : public Applet {
+  Q_OBJECT
 
 public:
-  explicit Applet(QWidget* parent = 0);
-  virtual ~Applet();
-  
-  virtual QWidget* widget() = 0;
+  explicit ClockApplet(QWidget* parent = 0);
+  virtual ~ClockApplet();
 
-  virtual void setPanelIconSize(int size) {
+  QWidget* widget() {
+    return label_;
   }
 
-  virtual void setPanelOrientation(Qt::Orientation orientation) {
-  }
-
-  virtual bool expand() {
-    return expand_;
-  }
-
-  virtual void setExpand(bool expand) {
-    expand_ = expand;
-  }
-
-  virtual bool loadSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual bool saveSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual void preferences() {
-  }
+private Q_SLOTS:
+  void onTimeout();
   
 private:
-  bool expand_;
+  QLabel* label_;
+  QTimer* timer_;
 };
+
+
+class ClockAppletFactory : public QObject, public Lxpanel::AppletFactory {
+  Q_OBJECT
+
+public:
+  virtual Lxpanel::Applet* create(QWidget* parent);
+
+  ClockAppletFactory();
+  virtual ~ClockAppletFactory();
+};
+
 
 }
 
-#endif // LXPANEL_APPLET_H
+#endif // LXPANEL_CLOCKAPPLET_H

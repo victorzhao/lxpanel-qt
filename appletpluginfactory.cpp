@@ -18,53 +18,30 @@
 */
 
 
-#ifndef LXPANEL_APPLET_H
-#define LXPANEL_APPLET_H
+#include "appletpluginfactory.h"
+#include <QPluginLoader>
 
-#include <QFrame>
-#include <QDomElement>
+using namespace Lxpanel;
 
-namespace Lxpanel {
-
-class Applet : public QObject {
-
-Q_OBJECT
-
-public:
-  explicit Applet(QWidget* parent = 0);
-  virtual ~Applet();
+AppletPluginFactory::AppletPluginFactory(QString filename):
+  plugin_(NULL),
+  moduleFile_(filename) {
   
-  virtual QWidget* widget() = 0;
+}
 
-  virtual void setPanelIconSize(int size) {
-  }
-
-  virtual void setPanelOrientation(Qt::Orientation orientation) {
-  }
-
-  virtual bool expand() {
-    return expand_;
-  }
-
-  virtual void setExpand(bool expand) {
-    expand_ = expand;
-  }
-
-  virtual bool loadSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual bool saveSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual void preferences() {
-  }
-  
-private:
-  bool expand_;
-};
+AppletPluginFactory::~AppletPluginFactory() {
 
 }
 
-#endif // LXPANEL_APPLET_H
+Applet* AppletPluginFactory::create(QWidget* parent) {
+  Applet* applet = NULL;
+  if(!plugin_) { // if the plugin is not yet loaded
+    QPluginLoader loader(moduleFile_);
+    QObject* obj = loader.instance();
+    plugin_ = qobject_cast<Lxpanel::AppletPlugin*>(obj);
+    // qDebug("module: %s, plugin(%p): %p\n%s", qPrintable(moduleFile_), obj, plugin_, qPrintable(loader.errorString()));
+  }
+  if(plugin_)
+    applet = plugin_->create(parent);
+  return applet;
+}

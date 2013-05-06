@@ -18,53 +18,43 @@
 */
 
 
-#ifndef LXPANEL_APPLET_H
-#define LXPANEL_APPLET_H
+#ifndef LXPANEL_APPMENUAPPLET_H
+#define LXPANEL_APPMENUAPPLET_H
 
-#include <QFrame>
-#include <QDomElement>
+#include <QPushButton>
+
+#include "../../applet.h"
+#include "../../appletfactory.h"
+#include "../../appletplugin.h"
 
 namespace Lxpanel {
 
-class Applet : public QObject {
-
-Q_OBJECT
+class AppMenuApplet: public Applet {
+  Q_OBJECT
 
 public:
-  explicit Applet(QWidget* parent = 0);
-  virtual ~Applet();
-  
-  virtual QWidget* widget() = 0;
+  explicit AppMenuApplet(QWidget* parent = 0);
+  virtual ~AppMenuApplet();
 
-  virtual void setPanelIconSize(int size) {
-  }
-
-  virtual void setPanelOrientation(Qt::Orientation orientation) {
-  }
-
-  virtual bool expand() {
-    return expand_;
-  }
-
-  virtual void setExpand(bool expand) {
-    expand_ = expand;
-  }
-
-  virtual bool loadSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual bool saveSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual void preferences() {
+  QWidget* widget() {
+    return button_;
   }
   
 private:
-  bool expand_;
+  QPushButton* button_;
+};
+
+
+class AppMenuPlugin: public QObject, public AppletPlugin {
+  Q_OBJECT
+  Q_INTERFACES(Lxpanel::AppletPlugin)
+
+public:
+  AppMenuPlugin();
+  virtual ~AppMenuPlugin();
+  virtual Applet* create(QWidget* parent);
 };
 
 }
 
-#endif // LXPANEL_APPLET_H
+#endif // LXPANEL_APPMENUAPPLET_H

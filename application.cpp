@@ -26,13 +26,20 @@
 
 #include <QDomDocument>
 #include <QFile>
+#include <QDir>
 
 #include "panel.h"
+
+// built-in applets
+#include "applets/clock/clockapplet.h"
+#include "applets/showdesktop/showdesktopapplet.h"
+#include "appletpluginfactory.h"
 
 using namespace Lxpanel;
 
 Application::Application(int& argc, char** argv, int flags):
   QApplication(argc, argv),
+  iconTheme_("elementary"),
   profile_("default") {
 
   QDesktopWidget* desktopWidget = QApplication::desktop();
@@ -48,8 +55,28 @@ bool Application::handleCommandLineArgs() {
   return true;
 }
 
+
+void Application::findAvailableApplets() {
+  // register built-in applets
+  knownApplets_.insert("clock", new ClockAppletFactory());
+  knownApplets_.insert("showdesktop", new ShowDesktopAppletFactory());
+
+  // find dynamic applets modules from module dirs
+  QDir dir;
+  dir.cd(QString(LXPANEL_LIB_DIR) + "/applets");
+  QStringList files = dir.entryList();
+  Q_FOREACH(QString file, files) {
+    if(file[0] != '.' && file.endsWith(".so")) {
+      QString name = file.left(file.length() - 3);
+      AppletFactory* factory = new AppletPluginFactory(dir.absoluteFilePath(file));
+      knownApplets_.insert(name, factory);
+    }
+  }
+}
+
 void Application::init() {
   handleCommandLineArgs();
+  findAvailableApplets();
   loadSettings();
 }
 
@@ -82,6 +109,10 @@ bool Application::loadConfigFile(QString path) {
               logoutCommand_ = childElement.text();
             else if(childElement.tagName() == "terminal_command")
               terminalCommand_ = childElement.text();
+            else if(childElement.tagName() == "icon_theme") {
+              iconTheme_ = childElement.text();
+              QIcon::setThemeName(iconTheme_);
+            }
             else if(childElement.tagName() == "theme") {
               // themeName_ = childElement.text();
             }

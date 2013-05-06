@@ -17,54 +17,33 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include "appmenuapplet.h"
+#include <QPushButton>
 
-#ifndef LXPANEL_APPLET_H
-#define LXPANEL_APPLET_H
+using namespace Lxpanel;
 
-#include <QFrame>
-#include <QDomElement>
+Q_EXPORT_PLUGIN2(appmenu, Lxpanel::AppMenuPlugin);
 
-namespace Lxpanel {
+AppMenuApplet::AppMenuApplet(QWidget* parent): Applet(parent) {
+  button_ = new QPushButton(parent);
+  button_->setText("Start");
+  button_->setIcon(QIcon::fromTheme("start-here"));
+  button_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+}
 
-class Applet : public QObject {
-
-Q_OBJECT
-
-public:
-  explicit Applet(QWidget* parent = 0);
-  virtual ~Applet();
-  
-  virtual QWidget* widget() = 0;
-
-  virtual void setPanelIconSize(int size) {
-  }
-
-  virtual void setPanelOrientation(Qt::Orientation orientation) {
-  }
-
-  virtual bool expand() {
-    return expand_;
-  }
-
-  virtual void setExpand(bool expand) {
-    expand_ = expand;
-  }
-
-  virtual bool loadSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual bool saveSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual void preferences() {
-  }
-  
-private:
-  bool expand_;
-};
+AppMenuApplet::~AppMenuApplet() {
 
 }
 
-#endif // LXPANEL_APPLET_H
+
+AppMenuPlugin::AppMenuPlugin(): QObject() {
+
+}
+
+AppMenuPlugin::~AppMenuPlugin() {
+
+}
+
+Applet* AppMenuPlugin::create(QWidget* parent) {
+  return new AppMenuApplet(parent);
+}

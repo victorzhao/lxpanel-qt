@@ -17,54 +17,46 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#ifndef LXPANEL_SHOWDESKTOPAPPLET_H
+#define LXPANEL_SHOWDESKTOPAPPLET_H
 
-#ifndef LXPANEL_APPLET_H
-#define LXPANEL_APPLET_H
+#include "../../appletfactory.h"
+#include "../../applet.h"
 
-#include <QFrame>
-#include <QDomElement>
+#include <QToolButton>
 
 namespace Lxpanel {
 
-class Applet : public QObject {
-
-Q_OBJECT
+class ShowDesktopApplet : public Applet {
+  Q_OBJECT
 
 public:
-  explicit Applet(QWidget* parent = 0);
-  virtual ~Applet();
+  explicit ShowDesktopApplet(QWidget* parent = 0);
+  virtual ~ShowDesktopApplet();
   
-  virtual QWidget* widget() = 0;
-
-  virtual void setPanelIconSize(int size) {
+  QWidget* widget() {
+    return button_;
   }
 
-  virtual void setPanelOrientation(Qt::Orientation orientation) {
-  }
+private Q_SLOTS:
+  void onButtonClicked();
 
-  virtual bool expand() {
-    return expand_;
-  }
-
-  virtual void setExpand(bool expand) {
-    expand_ = expand;
-  }
-
-  virtual bool loadSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual bool saveSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual void preferences() {
-  }
-  
 private:
-  bool expand_;
+  QToolButton* button_;
 };
+
+
+class ShowDesktopAppletFactory : public QObject, public Lxpanel::AppletFactory {
+  Q_OBJECT
+
+public:
+  virtual Lxpanel::Applet* create(QWidget* parent);
+
+  ShowDesktopAppletFactory();
+  virtual ~ShowDesktopAppletFactory();
+};
+
 
 }
 
-#endif // LXPANEL_APPLET_H
+#endif // LXPANEL_SHOWDESKTOPAPPLET_H

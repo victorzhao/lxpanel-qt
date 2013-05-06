@@ -18,53 +18,41 @@
 */
 
 
-#ifndef LXPANEL_APPLET_H
-#define LXPANEL_APPLET_H
+#include "clockapplet.h"
+#include <QTimer>
+#include <QDateTime>
+#include <QVBoxLayout>
 
-#include <QFrame>
-#include <QDomElement>
+using namespace Lxpanel;
 
-namespace Lxpanel {
-
-class Applet : public QObject {
-
-Q_OBJECT
-
-public:
-  explicit Applet(QWidget* parent = 0);
-  virtual ~Applet();
-  
-  virtual QWidget* widget() = 0;
-
-  virtual void setPanelIconSize(int size) {
-  }
-
-  virtual void setPanelOrientation(Qt::Orientation orientation) {
-  }
-
-  virtual bool expand() {
-    return expand_;
-  }
-
-  virtual void setExpand(bool expand) {
-    expand_ = expand;
-  }
-
-  virtual bool loadSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual bool saveSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual void preferences() {
-  }
-  
-private:
-  bool expand_;
-};
-
+ClockApplet::ClockApplet(QWidget* parent): Applet(parent) {
+  label_ = new QLabel(parent);
+  label_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+  timer_ = new QTimer();
+  connect(timer_, SIGNAL(timeout()), SLOT(onTimeout()));
+  timer_->start(1000);
 }
 
-#endif // LXPANEL_APPLET_H
+ClockApplet::~ClockApplet() {
+  timer_->stop();
+  delete timer_;
+}
+
+void ClockApplet::onTimeout() {
+  QDateTime current = QDateTime::currentDateTime();
+  label_->setText(current.toString("hh:mm:ss"));
+}
+
+
+ClockAppletFactory::ClockAppletFactory() {
+  
+}
+
+
+ClockAppletFactory::~ClockAppletFactory() {
+  
+}
+
+Applet* ClockAppletFactory::create(QWidget* parent) {
+  return new ClockApplet(parent);
+}

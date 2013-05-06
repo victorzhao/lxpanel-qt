@@ -18,53 +18,26 @@
 */
 
 
-#ifndef LXPANEL_APPLET_H
-#define LXPANEL_APPLET_H
+#ifndef LXPANEL_APPLETPLUGIN_H
+#define LXPANEL_APPLETPLUGIN_H
 
-#include <QFrame>
-#include <QDomElement>
+#include <QtPlugin>
+#include "applet.h"
 
 namespace Lxpanel {
 
-class Applet : public QObject {
-
-Q_OBJECT
-
+// abstract class which should be implemented by every dynamic applet plugins
+// p.s: built-in applets do not need to implement this.
+class AppletPlugin {
 public:
-  explicit Applet(QWidget* parent = 0);
-  virtual ~Applet();
-  
-  virtual QWidget* widget() = 0;
 
-  virtual void setPanelIconSize(int size) {
-  }
-
-  virtual void setPanelOrientation(Qt::Orientation orientation) {
-  }
-
-  virtual bool expand() {
-    return expand_;
-  }
-
-  virtual void setExpand(bool expand) {
-    expand_ = expand;
-  }
-
-  virtual bool loadSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual bool saveSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual void preferences() {
-  }
-  
-private:
-  bool expand_;
+  virtual ~AppletPlugin();
+  virtual Applet* create(QWidget* parent) = 0;
 };
 
-}
+};
 
-#endif // LXPANEL_APPLET_H
+Q_DECLARE_INTERFACE(Lxpanel::AppletPlugin, "org.lxde.LXPanel.AppletPlugin/1.0");
+
+
+#endif // LXPANEL_APPLETPLUGIN_H

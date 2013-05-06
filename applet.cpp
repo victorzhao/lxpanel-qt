@@ -22,7 +22,7 @@
 
 using namespace Lxpanel;
 
-Applet::Applet(QWidget* parent): QWidget(parent) {
+Applet::Applet(QWidget* parent) {
 
 }
 

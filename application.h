@@ -23,10 +23,12 @@
 
 #include <QApplication>
 #include <QVector>
+#include <QHash>
 
 namespace Lxpanel {
   
 class Panel;
+class AppletFactory;
 
 class Application : public QApplication {
   Q_OBJECT
@@ -36,7 +38,10 @@ public:
   virtual ~Application();
 
   void init();
-
+  AppletFactory* appletFactory(QString type) {
+    return knownApplets_.value(type, NULL);
+  }
+  
   // configuration profile
   QString profile() {
     return profile_;
@@ -63,6 +68,7 @@ public:
 
 protected:
   bool handleCommandLineArgs();
+  void findAvailableApplets();
   bool loadSettings();
   bool saveSettings();
   bool loadConfigFile(QString path);
@@ -80,7 +86,9 @@ private:
   QString fileManager_; // command used to launch file manager
   QString logoutCommand_; // command used to logout desktop session
   QString terminalCommand_; // command used to lauch a terminal emulator
+  QString iconTheme_;
 
+  QHash<QString, AppletFactory*> knownApplets_;
   QVector<Panel*> panels_; // all desktop panels
 };
 

@@ -18,53 +18,11 @@
 */
 
 
-#ifndef LXPANEL_APPLET_H
-#define LXPANEL_APPLET_H
+#include "appletfactory.h"
 
-#include <QFrame>
-#include <QDomElement>
+using namespace Lxpanel;
 
-namespace Lxpanel {
-
-class Applet : public QObject {
-
-Q_OBJECT
-
-public:
-  explicit Applet(QWidget* parent = 0);
-  virtual ~Applet();
-  
-  virtual QWidget* widget() = 0;
-
-  virtual void setPanelIconSize(int size) {
-  }
-
-  virtual void setPanelOrientation(Qt::Orientation orientation) {
-  }
-
-  virtual bool expand() {
-    return expand_;
-  }
-
-  virtual void setExpand(bool expand) {
-    expand_ = expand;
-  }
-
-  virtual bool loadSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual bool saveSettings(QDomElement& element) {
-    return true;
-  }
-
-  virtual void preferences() {
-  }
-  
-private:
-  bool expand_;
-};
+AppletFactory::~AppletFactory() {
 
 }
 
-#endif // LXPANEL_APPLET_H
