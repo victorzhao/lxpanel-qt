@@ -29,7 +29,7 @@
 			
 			<applet type="places" />
 
-			<applet type="launchbar">
+			<applet type="launcher">
 				<button type="app">
 					<desktop_id>pcmanfm.desktop</desktop_id>
 				</button>

@@ -37,4 +37,16 @@ public:
 
 }
 
+#define LXPANEL_DECLARE_BUILTIN_APPLET(appletClass) \
+namespace Lxpanel { \
+class appletClass##Factory: public AppletFactory { \
+public: \
+  appletClass##Factory() {} \
+  virtual ~appletClass##Factory() {} \
+  virtual Applet* create(QWidget* parent) { \
+    return new appletClass(parent); \
+  } \
+}; \
+};
+
 #endif // LXPANEL_APPLETFACTORY_H

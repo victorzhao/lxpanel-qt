@@ -45,18 +45,8 @@ private:
   QToolButton* button_;
 };
 
-
-class ShowDesktopAppletFactory : public QObject, public Lxpanel::AppletFactory {
-  Q_OBJECT
-
-public:
-  virtual Lxpanel::Applet* create(QWidget* parent);
-
-  ShowDesktopAppletFactory();
-  virtual ~ShowDesktopAppletFactory();
 };
 
-
-}
+LXPANEL_DECLARE_BUILTIN_APPLET(ShowDesktopApplet)
 
 #endif // LXPANEL_SHOWDESKTOPAPPLET_H

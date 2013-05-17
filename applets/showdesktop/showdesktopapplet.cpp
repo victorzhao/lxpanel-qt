@@ -42,17 +42,3 @@ void ShowDesktopApplet::onButtonClicked() {
   
 }
 
-
-
-ShowDesktopAppletFactory::ShowDesktopAppletFactory() {
-  
-}
-
-
-ShowDesktopAppletFactory::~ShowDesktopAppletFactory() {
-  
-}
-
-Applet* ShowDesktopAppletFactory::create(QWidget* parent) {
-  return new ShowDesktopApplet(parent);
-}

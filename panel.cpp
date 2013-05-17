@@ -144,7 +144,10 @@ bool Panel::loadApplet(QDomElement& element) {
   if(factory) {
     Applet* applet = factory->create(this);
     if(applet) {
-      insertApplet(applet, -1);
+      if(applet->loadSettings(element))
+        insertApplet(applet, -1);
+      else
+        delete applet;
       qDebug("applet: %s is loaded", qPrintable(applet_type));
     }
     else
@@ -541,7 +544,7 @@ void Panel::reserveScreenSpace(QRect* rect) {
   // reserve space for the panel
   // See: http://standards.freedesktop.org/wm-spec/1.3/ar01s05.html#NETWMSTRUTPARTIAL
   Atom _NET_WM_STRUT_PARTIAL = XInternAtom(QX11Info::display(), "_NET_WM_STRUT_PARTIAL", 0);
-  Window window = reinterpret_cast<Window>(effectiveWinId());
+  Window window = Window(effectiveWinId());
 
   if(rect != NULL) {
     // _NET_WM_STRUT_PARTIAL data format (CARDINAL[12]/32):

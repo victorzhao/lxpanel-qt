@@ -33,6 +33,7 @@
 // built-in applets
 #include "applets/clock/clockapplet.h"
 #include "applets/showdesktop/showdesktopapplet.h"
+#include "applets/launcher/launcherapplet.h"
 #include "appletpluginfactory.h"
 
 using namespace Lxpanel;
@@ -60,6 +61,7 @@ void Application::findAvailableApplets() {
   // register built-in applets
   knownApplets_.insert("clock", new ClockAppletFactory());
   knownApplets_.insert("showdesktop", new ShowDesktopAppletFactory());
+  knownApplets_.insert("launcher", new LauncherAppletFactory());
 
   // find dynamic applets modules from module dirs
   QDir dir;

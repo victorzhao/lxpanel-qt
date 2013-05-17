@@ -45,13 +45,13 @@ private:
 };
 
 
-class AppMenuPlugin: public QObject, public AppletPlugin {
+class AppMenuAppletPlugin: public QObject, public AppletPlugin {
   Q_OBJECT
   Q_INTERFACES(Lxpanel::AppletPlugin)
 
 public:
-  AppMenuPlugin();
-  virtual ~AppMenuPlugin();
+  AppMenuAppletPlugin();
+  virtual ~AppMenuAppletPlugin();
   virtual Applet* create(QWidget* parent);
 };
 

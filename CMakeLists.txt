@@ -40,6 +40,7 @@ set(lxpanel_qt_SRCS
   # built-in applets
   applets/clock/clockapplet.cpp
   applets/showdesktop/showdesktopapplet.cpp
+  applets/launcher/launcherapplet.cpp
 )
 
 add_definitions(

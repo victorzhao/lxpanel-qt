@@ -42,17 +42,3 @@ void ClockApplet::onTimeout() {
   QDateTime current = QDateTime::currentDateTime();
   label_->setText(current.toString("hh:mm:ss"));
 }
-
-
-ClockAppletFactory::ClockAppletFactory() {
-  
-}
-
-
-ClockAppletFactory::~ClockAppletFactory() {
-  
-}
-
-Applet* ClockAppletFactory::create(QWidget* parent) {
-  return new ClockApplet(parent);
-}

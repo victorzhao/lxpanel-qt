@@ -22,7 +22,7 @@
 
 using namespace Lxpanel;
 
-Q_EXPORT_PLUGIN2(appmenu, Lxpanel::AppMenuPlugin);
+Q_EXPORT_PLUGIN2(appmenu, Lxpanel::AppMenuAppletPlugin);
 
 AppMenuApplet::AppMenuApplet(QWidget* parent): Applet(parent) {
   button_ = new QPushButton(parent);
@@ -36,14 +36,14 @@ AppMenuApplet::~AppMenuApplet() {
 }
 
 
-AppMenuPlugin::AppMenuPlugin(): QObject() {
+AppMenuAppletPlugin::AppMenuAppletPlugin(): QObject() {
 
 }
 
-AppMenuPlugin::~AppMenuPlugin() {
+AppMenuAppletPlugin::~AppMenuAppletPlugin() {
 
 }
 
-Applet* AppMenuPlugin::create(QWidget* parent) {
+Applet* AppMenuAppletPlugin::create(QWidget* parent) {
   return new AppMenuApplet(parent);
 }

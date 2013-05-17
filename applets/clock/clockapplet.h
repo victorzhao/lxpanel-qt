@@ -49,18 +49,8 @@ private:
   QTimer* timer_;
 };
 
-
-class ClockAppletFactory : public QObject, public Lxpanel::AppletFactory {
-  Q_OBJECT
-
-public:
-  virtual Lxpanel::Applet* create(QWidget* parent);
-
-  ClockAppletFactory();
-  virtual ~ClockAppletFactory();
-};
-
-
 }
+
+LXPANEL_DECLARE_BUILTIN_APPLET(ClockApplet)
 
 #endif // LXPANEL_CLOCKAPPLET_H
