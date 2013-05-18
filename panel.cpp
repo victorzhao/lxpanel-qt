@@ -44,6 +44,9 @@ Panel::Panel():
   setWindowFlags(windowFlags()|Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
   // FIXME: add proper window flags to make it skip task bar and toplevel?
 
+  setAttribute(Qt::WA_X11NetWmWindowTypeDock);
+  setAttribute(Qt::WA_AlwaysShowToolTips);
+
   // FIXME: this does not work at all
   setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 
@@ -140,34 +143,18 @@ void Panel::onGeometryChanged() {
 bool Panel::loadApplet(QDomElement& element) {
   QString applet_type = element.attribute("type");
   Application* app = static_cast<Application*>(qApp);
-  AppletFactory* factory = app->appletFactory(applet_type);
-  if(factory) {
-    Applet* applet = factory->create(this);
-    if(applet) {
-      if(applet->loadSettings(element))
-        insertApplet(applet, -1);
-      else
-        delete applet;
+  Applet* applet = app->appletManager().createApplet(applet_type);
+  if(applet) {
+    if(applet->loadSettings(element)) {
+      insertApplet(applet, -1);
       qDebug("applet: %s is loaded", qPrintable(applet_type));
     }
-    else
-      qDebug("error creating applet: %s", qPrintable(applet_type));
-  }
-  else {
-    qDebug("applet type: %s is unknown", qPrintable(applet_type));
-  }
-  // qDebug("  load applet: %s", qPrintable(applet_type));
-  /* TODO
-  var applet = Applet.new_from_type_name(applet_type);
-
-  // qDebug("applet: %s, %p\n", applet_type, applet);
-  if(applet != null) {
-    if(applet.load_config(node)) {
-      insert_applet(applet);
+    else {
+      app->appletManager().destroyApplet(applet);
+      applet = NULL;
     }
   }
-  */
-  return true;
+  return (applet != NULL);
 }
 
 // load the panel from a config file node

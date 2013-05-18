@@ -1,6 +1,6 @@
 /*
     <one line to give the program's name and a brief idea of what it does.>
-    Copyright (C) 2013  <copyright holder> <email>
+    Copyright (C) 2013  PCMan <email>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,38 +17,33 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef LXPANEL_CLOCKAPPLET_H
-#define LXPANEL_CLOCKAPPLET_H
 
-#include "../../appletfactory.h"
-#include "../../applet.h"
+#ifndef LXPANEL_APPLETMANAGER_H
+#define LXPANEL_APPLETMANAGER_H
 
-#include <QLabel>
-
-class QLabel;
-class QTimer;
+#include <QObject>
+#include <QHash>
+#include "appletfactory.h"
 
 namespace Lxpanel {
 
-class ClockApplet : public Applet {
+class Applet;
+class AppletFactory;
+
+class AppletManager : public QObject {
   Q_OBJECT
-
 public:
-  explicit ClockApplet(QWidget* parent = 0);
-  virtual ~ClockApplet();
+  explicit AppletManager();
+  virtual ~AppletManager();
+  void init();
 
-  QWidget* widget() {
-    return label_;
-  }
+  Applet* createApplet(QString typeName);
+  void destroyApplet(Applet* applet);
 
-private Q_SLOTS:
-  void onTimeout();
-  
 private:
-  QLabel* label_;
-  QTimer* timer_;
+  QHash<QString, AppletFactory*> knownApplets_;
 };
 
 }
 
-#endif // LXPANEL_CLOCKAPPLET_H
+#endif // LXPANEL_APPLETMANAGER_H

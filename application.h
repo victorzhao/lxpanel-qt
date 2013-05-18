@@ -23,7 +23,7 @@
 
 #include <QApplication>
 #include <QVector>
-#include <QHash>
+#include "appletmanager.h"
 
 namespace Lxpanel {
   
@@ -38,9 +38,6 @@ public:
   virtual ~Application();
 
   void init();
-  AppletFactory* appletFactory(QString type) {
-    return knownApplets_.value(type, NULL);
-  }
   
   // configuration profile
   QString profile() {
@@ -66,9 +63,12 @@ public:
     return panels_;
   }
 
+  AppletManager& appletManager() {
+    return appletManager_;
+  }
+
 protected:
   bool handleCommandLineArgs();
-  void findAvailableApplets();
   bool loadSettings();
   bool saveSettings();
   bool loadConfigFile(QString path);
@@ -88,7 +88,7 @@ private:
   QString terminalCommand_; // command used to lauch a terminal emulator
   QString iconTheme_;
 
-  QHash<QString, AppletFactory*> knownApplets_;
+  AppletManager appletManager_;
   QVector<Panel*> panels_; // all desktop panels
 };
 

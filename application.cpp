@@ -26,21 +26,16 @@
 
 #include <QDomDocument>
 #include <QFile>
-#include <QDir>
+#include <QIcon>
 
 #include "panel.h"
-
-// built-in applets
-#include "applets/clock/clockapplet.h"
-#include "applets/showdesktop/showdesktopapplet.h"
-#include "applets/launcher/launcherapplet.h"
-#include "appletpluginfactory.h"
 
 using namespace Lxpanel;
 
 Application::Application(int& argc, char** argv, int flags):
   QApplication(argc, argv),
   iconTheme_("elementary"),
+  appletManager_(),
   profile_("default") {
 
   QDesktopWidget* desktopWidget = QApplication::desktop();
@@ -56,29 +51,10 @@ bool Application::handleCommandLineArgs() {
   return true;
 }
 
-
-void Application::findAvailableApplets() {
-  // register built-in applets
-  knownApplets_.insert("clock", new ClockAppletFactory());
-  knownApplets_.insert("showdesktop", new ShowDesktopAppletFactory());
-  knownApplets_.insert("launcher", new LauncherAppletFactory());
-
-  // find dynamic applets modules from module dirs
-  QDir dir;
-  dir.cd(QString(LXPANEL_LIB_DIR) + "/applets");
-  QStringList files = dir.entryList();
-  Q_FOREACH(QString file, files) {
-    if(file[0] != '.' && file.endsWith(".so")) {
-      QString name = file.left(file.length() - 3);
-      AppletFactory* factory = new AppletPluginFactory(dir.absoluteFilePath(file));
-      knownApplets_.insert(name, factory);
-    }
-  }
-}
-
 void Application::init() {
   handleCommandLineArgs();
-  findAvailableApplets();
+  appletManager_.init();
+
   loadSettings();
 }
 

@@ -1,0 +1,8 @@
+The code in this directory is taken from KDE module kdeui in kdelibs.
+Little modifications are done to make it compile inside lxpanel-qt.
+
+Copyright (c) 2000 Troll Tech AS
+Copyright (c) 2003 Lubos Lunak <l.lunak@kde.org>
+
+Grabbed on 2013-05-18
+Git SHA1 ID: 859db6c54b0f98607a61f0348b75f3b6fea76f82

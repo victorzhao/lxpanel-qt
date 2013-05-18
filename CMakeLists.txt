@@ -29,11 +29,19 @@ include_directories(
 
 set(CMAKE_AUTOMOC TRUE)
 
+# NETWM support taken from kdeui
+set(netwm_SRCS
+  netwm/netwm.cpp
+  netwm/kxutils.cpp
+)
+
 set(lxpanel_qt_SRCS
+  ${netwm_SRCS}
   application.cpp
   main.cpp
   panel.cpp
   applet.cpp
+  appletmanager.cpp
   appletplugin.cpp
   appletfactory.cpp
   appletpluginfactory.cpp

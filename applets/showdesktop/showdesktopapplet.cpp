@@ -21,6 +21,9 @@
 #include "showdesktopapplet.h"
 #include <QToolButton>
 
+// FIXME: add the include path
+#include "../../netwm/netwm.h"
+
 using namespace Lxpanel;
 
 ShowDesktopApplet::ShowDesktopApplet(QWidget* parent): Applet(parent) {
@@ -39,6 +42,10 @@ ShowDesktopApplet::~ShowDesktopApplet() {
 }
 
 void ShowDesktopApplet::onButtonClicked() {
-  
+  unsigned long props[] = {0, NET::WM2ShowingDesktop};
+  NETRootInfo info(QX11Info::display(), props, 2);
+  bool show = info.showingDesktop();
+  qDebug("show: %d", show);
+  info.setShowingDesktop(!show);
 }
 

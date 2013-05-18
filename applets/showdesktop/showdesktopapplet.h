@@ -47,6 +47,4 @@ private:
 
 };
 
-LXPANEL_DECLARE_BUILTIN_APPLET(ShowDesktopApplet)
-
 #endif // LXPANEL_SHOWDESKTOPAPPLET_H

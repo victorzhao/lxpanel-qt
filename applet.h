@@ -60,7 +60,7 @@ public:
 
   virtual void preferences() {
   }
-  
+
 private:
   bool expand_;
 };
