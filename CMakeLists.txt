@@ -13,9 +13,16 @@ pkg_check_modules(GLIB REQUIRED
   glib-2.0
 )
 
-find_package(PkgConfig)
 pkg_check_modules(X11 REQUIRED
   x11
+)
+
+pkg_check_modules(GTOP REQUIRED
+  libgtop-2.0
+)
+
+pkg_check_modules(MENU_CACHE REQUIRED
+  libmenu-cache>=0.3.2
 )
 
 set(CMAKE_CXX_FLAGS "-DQT_NO_KEYWORDS -fno-exceptions")
@@ -24,6 +31,8 @@ include_directories(
   ${QT_INCLUDES}
   ${GLIB_INCLUDE_DIRS}
   ${X11_INCLUDE_DIRS}
+  ${GTOP_INCLUDE_DIRS}
+  ${MENU_CACHE_INCLUDE_DIRS}
   ${CMAKE_CURRENT_BINARY_DIR}
 )
 
@@ -48,7 +57,8 @@ set(lxpanel_qt_SRCS
   # built-in applets
   applets/clock/clockapplet.cpp
   applets/showdesktop/showdesktopapplet.cpp
-  applets/launcher/launcherapplet.cpp
+  # applets/launcher/launcherapplet.cpp
+  applets/netstatus/netstatusapplet.cpp
 )
 
 add_definitions(
@@ -66,6 +76,8 @@ target_link_libraries(lxpanel-qt
   ${QT_QTXML_LIBRARY}
   ${GLIB_LIBRARIES}
   ${X11_LIBRARIES}
+  ${GTOP_LIBRARIES}
+  ${MENU_CACHELIBRARIES}
 )
 
 install(TARGETS lxpanel-qt

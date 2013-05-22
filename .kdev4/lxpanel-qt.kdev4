@@ -3,11 +3,11 @@ BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x
 
 [CMake]
 Build Directory Count=1
-BuildDirs=/media/dd15356c-62b5-45a8-aa0b-058c8e590b34/Projects/lxde/lxpanel-qt/build
+BuildDirs[$e]=/media/dd15356c-62b5-45a8-aa0b-058c8e590b34/Projects/lxde/lxpanel-qt/build,$HOME/lxpanel-qt/build
 CMakeDir=/usr/share/cmake-2.8/Modules
 Current Build Directory Index=0
 Current CMake Binary=file:///usr/bin/cmake
-CurrentBuildDir=file:///media/dd15356c-62b5-45a8-aa0b-058c8e590b34/Projects/lxde/lxpanel-qt/build
+CurrentBuildDir=file:///home/pcman/lxpanel-qt/build
 CurrentBuildType=Debug
 CurrentInstallDir=
 Extra Arguments=
@@ -41,6 +41,9 @@ Project Target=lxpanel-qt,lxpanel-qt
 Use External Terminal=false
 Working Directory=
 isExecutable=false
+
+[MakeBuilder]
+Number Of Jobs=1
 
 [Project]
 VersionControlSupport=kdevgit

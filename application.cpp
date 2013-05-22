@@ -70,6 +70,8 @@ bool Application::loadConfigFile(QString path) {
   }
   file.close();
 
+  QIcon::setThemeName(iconTheme_);
+
   // the XML document is loaded
   QDomElement rootElement = doc.documentElement();
   for(QDomNode node = rootElement.firstChild(); !node.isNull(); node = node.nextSibling()) {
@@ -134,6 +136,9 @@ bool Application::loadConfigFile(QString path) {
 
 bool Application::loadSettings() {
   bool loaded = false;
+
+  QIcon::setThemeName("elementary");
+
   // try to load user-specific config file first
   char* fpath = g_build_filename(g_get_user_config_dir(), "lxpanel-qt", qPrintable(profile_), "config.xml", NULL);
   if(loadConfigFile(fpath)) {
