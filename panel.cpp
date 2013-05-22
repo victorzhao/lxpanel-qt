@@ -256,8 +256,8 @@ bool Panel::load(QDomElement& element) {
 
   }
 
-  QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Preferred);
-  layout_->addSpacerItem(spacer);
+  //QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Preferred);
+  //layout_->addSpacerItem(spacer);
   // update geometry
   recalculateGeometry();
 
@@ -302,7 +302,8 @@ bool Panel::save(QDomElement& element) {
 void Panel::insertApplet(Applet* applet, int index) {
   QWidget* appletWidget = applet->widget();
   if(appletWidget) {
-    layout_->insertWidget(index, appletWidget, 0, Qt::AlignLeft|Qt::AlignVCenter);
+    int stretch = 0;//applet->expand() ? 1 : 0;
+    layout_->insertWidget(index, appletWidget, stretch, 0);
     appletWidget->show();
     QRect rc = appletWidget->geometry();
     qDebug("%d,%d,%d,%d", rc.x(), rc.y(), rc.width(), rc.height());

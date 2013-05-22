@@ -30,7 +30,6 @@ ShowDesktopApplet::ShowDesktopApplet(QWidget* parent): Applet(parent) {
   button_ = new QToolButton(parent);
   button_->setToolTip(tr("Show desktop"));
   button_->setText(tr("Show desktop"));
-  QIcon::setThemeName("elementary");
   button_->setIcon(QIcon::fromTheme("user-desktop"));
   //button_->setIconSize(QSize(32, 32));
   button_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);

@@ -31,6 +31,7 @@ ClockApplet::ClockApplet(QWidget* parent): Applet(parent) {
   timer_ = new QTimer();
   connect(timer_, SIGNAL(timeout()), SLOT(onTimeout()));
   timer_->start(1000);
+  onTimeout();
 }
 
 ClockApplet::~ClockApplet() {

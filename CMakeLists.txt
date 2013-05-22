@@ -66,6 +66,7 @@ set(lxpanel_qt_SRCS
   applets/showdesktop/showdesktopapplet.cpp
   applets/launcher/launcherapplet.cpp
   applets/netstatus/netstatusapplet.cpp
+  applets/blank/blankapplet.cpp
 )
 
 add_definitions(

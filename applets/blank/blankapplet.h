@@ -18,17 +18,30 @@
 */
 
 
-#include "applet.h"
+#ifndef LXPANEL_BLANKAPPLET_H
+#define LXPANEL_BLANKAPPLET_H
 
-using namespace Lxpanel;
+#include "../../applet.h"
 
-Applet::Applet(QWidget* parent):
-  expand_(false) {
+namespace Lxpanel {
+
+class BlankApplet : public Lxpanel::Applet {
+
+public:
+  explicit BlankApplet(QWidget* parent = 0);
+  virtual ~BlankApplet();
+  virtual QWidget* widget() {
+    return widget_;
+  }
+  virtual bool loadSettings(QDomElement& element);
+  virtual bool saveSettings(QDomElement& element);
+  virtual void preferences();
+
+private:
+  QWidget* widget_;
+  int size_;
+};
 
 }
 
-Applet::~Applet() {
-
-}
-
-#include "applet.moc"
+#endif // LXPANEL_BLANKAPPLET_H
