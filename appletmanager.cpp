@@ -24,7 +24,7 @@
 // built-in applets
 #include "applets/clock/clockapplet.h"
 #include "applets/showdesktop/showdesktopapplet.h"
-// #include "applets/launcher/launcherapplet.h"
+#include "applets/launcher/launcherapplet.h"
 #include "applets/netstatus/netstatusapplet.h"
 #include "appletpluginfactory.h"
 
@@ -32,7 +32,7 @@
 using namespace Lxpanel;
 
 LXPANEL_DECLARE_BUILTIN_APPLET(ClockApplet)
-// LXPANEL_DECLARE_BUILTIN_APPLET(LauncherApplet)
+LXPANEL_DECLARE_BUILTIN_APPLET(LauncherApplet)
 LXPANEL_DECLARE_BUILTIN_APPLET(ShowDesktopApplet)
 LXPANEL_DECLARE_BUILTIN_APPLET(NetStatusApplet)
 
@@ -48,7 +48,7 @@ void AppletManager::init() {
   // register built-in applets
   knownApplets_.insert("clock", new ClockAppletFactory());
   knownApplets_.insert("showdesktop", new ShowDesktopAppletFactory());
-  // knownApplets_.insert("launcher", new LauncherAppletFactory());
+  knownApplets_.insert("launcher", new LauncherAppletFactory());
   knownApplets_.insert("netstatus", new NetStatusAppletFactory());
 
   // find dynamic applets modules from module dirs

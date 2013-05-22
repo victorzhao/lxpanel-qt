@@ -34,7 +34,8 @@ using namespace Lxpanel;
 
 Application::Application(int& argc, char** argv, int flags):
   QApplication(argc, argv),
-  iconTheme_("elementary"),
+  desktopSettings_(),
+  iconTheme_(),
   appletManager_(),
   profile_("default") {
 
@@ -55,6 +56,8 @@ void Application::init() {
   handleCommandLineArgs();
   appletManager_.init();
 
+  iconTheme_ = desktopSettings_.iconThemeName();
+  qDebug("icon %s", qPrintable(iconTheme_));
   loadSettings();
 }
 
@@ -89,10 +92,10 @@ bool Application::loadConfigFile(QString path) {
               logoutCommand_ = childElement.text();
             else if(childElement.tagName() == "terminal_command")
               terminalCommand_ = childElement.text();
-            else if(childElement.tagName() == "icon_theme") {
-              iconTheme_ = childElement.text();
-              QIcon::setThemeName(iconTheme_);
-            }
+            //else if(childElement.tagName() == "icon_theme") {
+            //  iconTheme_ = childElement.text();
+            //  QIcon::setThemeName(iconTheme_);
+            //}
             else if(childElement.tagName() == "theme") {
               // themeName_ = childElement.text();
             }
@@ -186,6 +189,13 @@ void Application::onScreenResized(int screen) {
       panel->recalculateGeometry();
   }
 }
+
+bool Application::x11EventFilter(XEvent* event) {
+  if(desktopSettings_.x11EventFilter(event))
+    return true;
+  return QApplication::x11EventFilter(event);
+}
+
 
 #if 0
 bool Application::save_all_panels(string profile_name) {

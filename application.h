@@ -24,6 +24,7 @@
 #include <QApplication>
 #include <QVector>
 #include "appletmanager.h"
+#include "desktopsettings.h"
 
 namespace Lxpanel {
   
@@ -76,6 +77,8 @@ protected:
 
   void addPanel(Panel* panel);
   void removePanel(Panel* panel);
+  
+  virtual bool x11EventFilter(XEvent* event);
 
 private Q_SLOTS:
   void onScreenResized(int screen);
@@ -88,6 +91,7 @@ private:
   QString terminalCommand_; // command used to lauch a terminal emulator
   QString iconTheme_;
 
+  Xdg::DesktopSettings desktopSettings_;
   AppletManager appletManager_;
   QVector<Panel*> panels_; // all desktop panels
 };

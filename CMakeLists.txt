@@ -44,8 +44,15 @@ set(netwm_SRCS
   netwm/kxutils.cpp
 )
 
+set(desktop_settings_SRCS
+  desktopsettings.cpp
+  xsettings/xsettings-client.c
+  xsettings/xsettings-common.c
+)
+
 set(lxpanel_qt_SRCS
   ${netwm_SRCS}
+  ${desktop_settings_SRCS}
   application.cpp
   main.cpp
   panel.cpp
@@ -57,7 +64,7 @@ set(lxpanel_qt_SRCS
   # built-in applets
   applets/clock/clockapplet.cpp
   applets/showdesktop/showdesktopapplet.cpp
-  # applets/launcher/launcherapplet.cpp
+  applets/launcher/launcherapplet.cpp
   applets/netstatus/netstatusapplet.cpp
 )
 
