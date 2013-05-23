@@ -2,9 +2,9 @@
 BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x01\x00\x00\x00\x14\x00l\x00x\x00p\x00a\x00n\x00e\x00l\x00-\x00q\x00t)
 
 [CMake]
-Build Directory Count=2
-CMakeDir=/usr/share/cmake-2.8/Modules
-Current Build Directory Index=1
+Build Directory Count=3
+CMakeDir=file:///usr/share/cmake-2.8/Modules
+Current Build Directory Index=2
 ProjectRootRelative=./
 
 [CMake][CMake Build Directory 0]
@@ -20,6 +20,14 @@ Build Directory Path=file:///home/pcman/lxpanel-qt/build
 Build Type=Release
 CMake Binary=file:///usr/bin/cmake
 Install Directory=file:///usr/local
+
+[CMake][CMake Build Directory 2]
+Build Directory Path=file:///home/pcman/Projects/lxde/lxpanel-qt/build
+Build Type=Debug
+CMake Binary=file:///usr/bin/cmake
+Environment Profile=
+Extra Arguments=
+Install Directory=
 
 [Launch]
 Launch Configurations=Launch Configuration 0

@@ -26,6 +26,8 @@
 #include "appletmanager.h"
 #include "desktopsettings.h"
 
+#include <libfm-qt/libfmqt.h>
+
 namespace Lxpanel {
   
 class Panel;
@@ -94,6 +96,7 @@ private:
   Xdg::DesktopSettings desktopSettings_;
   AppletManager appletManager_;
   QVector<Panel*> panels_; // all desktop panels
+  Fm::LibFmQt libfmQt_;
 };
 
 }

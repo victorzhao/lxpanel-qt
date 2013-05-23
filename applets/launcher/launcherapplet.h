@@ -23,7 +23,6 @@
 
 #include <QFrame>
 #include <QBoxLayout>
-#include <QToolButton>
 
 #include "../../applet.h"
 #include "../../appletfactory.h"
@@ -40,7 +39,13 @@ public:
   virtual QWidget* widget() {
     return frame_;
   }
-  
+
+  virtual bool loadSettings(QDomElement& element);
+  virtual bool saveSettings(QDomElement& element);
+
+private:
+  void loadButton(QDomElement& element);
+
 private:
   QFrame* frame_;
   QBoxLayout* layout_;
