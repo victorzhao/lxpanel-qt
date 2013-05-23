@@ -138,11 +138,11 @@ void DesktopSettings::emitChanged() {
 // only emit one changed() signal for serial changes
 void DesktopSettings::queueEmitChanged() {
   if(delayEmitTimeout_)
-    delayEmitTimeout_->start(400);
+    delayEmitTimeout_->start(100);
   else {
     delayEmitTimeout_ = new QTimer();
     delayEmitTimeout_->setSingleShot(true);
-    delayEmitTimeout_->start(400);
+    delayEmitTimeout_->start(100);
     connect(delayEmitTimeout_, SIGNAL(timeout()), SLOT(emitChanged()));
   }
 }

@@ -303,6 +303,7 @@ bool Panel::save(QDomElement& element) {
 void Panel::insertApplet(Applet* applet, int index) {
   QWidget* appletWidget = applet->widget();
   if(appletWidget) {
+    applets_.insert(index, applet);
     int stretch = 0;//applet->expand() ? 1 : 0;
     layout_->insertWidget(index, appletWidget, stretch, 0);
     appletWidget->show();

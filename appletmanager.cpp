@@ -27,6 +27,7 @@
 #include "applets/launcher/launcherapplet.h"
 #include "applets/netstatus/netstatusapplet.h"
 #include "applets/blank/blankapplet.h"
+#include "applets/pager/pagerapplet.h"
 #include "appletpluginfactory.h"
 
 
@@ -37,6 +38,7 @@ LXPANEL_DECLARE_BUILTIN_APPLET(LauncherApplet)
 LXPANEL_DECLARE_BUILTIN_APPLET(ShowDesktopApplet)
 LXPANEL_DECLARE_BUILTIN_APPLET(NetStatusApplet)
 LXPANEL_DECLARE_BUILTIN_APPLET(BlankApplet)
+LXPANEL_DECLARE_BUILTIN_APPLET(PagerApplet)
 
 AppletManager::AppletManager() {
 
@@ -53,6 +55,7 @@ void AppletManager::init() {
   knownApplets_.insert("launcher", new LauncherAppletFactory());
   knownApplets_.insert("netstatus", new NetStatusAppletFactory());
   knownApplets_.insert("blank", new BlankAppletFactory());
+  knownApplets_.insert("pager", new PagerAppletFactory());
 
   // find dynamic applets modules from module dirs
   QDir dir;

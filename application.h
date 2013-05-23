@@ -33,6 +33,12 @@ namespace Lxpanel {
 class Panel;
 class AppletFactory;
 
+class XEventFilter {
+public:
+  virtual bool x11EventFilter(XEvent * event) = 0;
+};
+
+
 class Application : public QApplication {
   Q_OBJECT
 
@@ -70,6 +76,14 @@ public:
     return appletManager_;
   }
 
+  void addXEventFilter(XEventFilter* filter) {
+    xeventFilters_.append(filter);
+  }
+
+  void removeXEventFilter(XEventFilter* filter) {
+    xeventFilters_.removeOne(filter);
+  }
+
 protected:
   bool handleCommandLineArgs();
   bool loadSettings();
@@ -97,6 +111,7 @@ private:
   AppletManager appletManager_;
   QVector<Panel*> panels_; // all desktop panels
   Fm::LibFmQt libfmQt_;
+  QList<XEventFilter*> xeventFilters_;
 };
 
 }

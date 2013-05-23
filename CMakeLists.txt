@@ -76,6 +76,7 @@ set(lxpanel_qt_SRCS
   applets/launcher/launchbutton.cpp
   applets/netstatus/netstatusapplet.cpp
   applets/blank/blankapplet.cpp
+  applets/pager/pagerapplet.cpp
 )
 
 add_definitions(

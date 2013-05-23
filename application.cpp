@@ -29,6 +29,7 @@
 #include <QIcon>
 
 #include "panel.h"
+#include "applet.h"
 
 using namespace Lxpanel;
 
@@ -193,6 +194,10 @@ void Application::onScreenResized(int screen) {
 bool Application::x11EventFilter(XEvent* event) {
   if(desktopSettings_.x11EventFilter(event))
     return true;
+  Q_FOREACH(XEventFilter* filter, xeventFilters_) {
+    if(filter->x11EventFilter(event))
+      return true;
+  }
   return QApplication::x11EventFilter(event);
 }
 
