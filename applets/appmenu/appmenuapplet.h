@@ -22,10 +22,13 @@
 #define LXPANEL_APPMENUAPPLET_H
 
 #include <QPushButton>
+#include <menu-cache/menu-cache.h>
 
 #include "../../applet.h"
 #include "../../appletfactory.h"
 #include "../../appletplugin.h"
+
+class QMenu;
 
 namespace Lxpanel {
 
@@ -39,9 +42,24 @@ public:
   QWidget* widget() {
     return button_;
   }
-  
+
+private:
+
+  void addMenuItems(QMenu* menu, MenuCacheDir* dir);
+  void reloadMenu();
+  static void reloadNotify(MenuCache* mc, AppMenuApplet* pThis) {
+    pThis->reloadMenu();
+  }
+
+private Q_SLOTS:
+  void onItemTrigerred();
+  void onItemHovered(QAction * action);
+
 private:
   QPushButton* button_;
+  QMenu* menu_;
+  MenuCache* menu_cache;
+  MenuCacheNotifyId menu_cache_reload_notify;
 };
 
 

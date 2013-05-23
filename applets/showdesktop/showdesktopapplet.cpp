@@ -33,6 +33,7 @@ ShowDesktopApplet::ShowDesktopApplet(QWidget* parent): Applet(parent) {
   button_->setIcon(QIcon::fromTheme("user-desktop"));
   //button_->setIconSize(QSize(32, 32));
   button_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+  button_->setAutoRaise(true);
   
   connect(button_, SIGNAL(clicked(bool)), SLOT(onButtonClicked()));
 }

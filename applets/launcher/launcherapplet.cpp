@@ -28,6 +28,9 @@ LauncherApplet::LauncherApplet(QWidget* parent): Applet() {
   frame_ = new QFrame(parent);
   layout_ = new QBoxLayout(QBoxLayout::LeftToRight, frame_);
   frame_->setLayout(layout_);
+  layout_->setMargin(0);
+  layout_->setContentsMargins(0, 0, 0, 0);
+  layout_->setSpacing(0);
 }
 
 LauncherApplet::~LauncherApplet() {

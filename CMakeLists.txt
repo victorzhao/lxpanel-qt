@@ -24,7 +24,7 @@ pkg_check_modules(GTOP REQUIRED
 )
 
 pkg_check_modules(MENU_CACHE REQUIRED
-  libmenu-cache>=0.3.2
+  libmenu-cache>=0.3.3
 )
 
 pkg_check_modules(LIBFM_QT REQUIRED

@@ -53,6 +53,7 @@ Panel::Panel():
   layout_ = new QBoxLayout(QBoxLayout::LeftToRight, this);
   // layout_ = new QHBoxLayout(this);
   layout_->setMargin(0);
+  layout_->setContentsMargins(0, 0, 0, 0);
   // layout_->setSizeConstraint(QLayout::SetNoConstraint);
   setLayout(layout_);
 }
