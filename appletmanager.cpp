@@ -28,6 +28,7 @@
 #include "applets/netstatus/netstatusapplet.h"
 #include "applets/blank/blankapplet.h"
 #include "applets/pager/pagerapplet.h"
+#include "applets/task/taskapplet.h"
 #include "appletpluginfactory.h"
 
 
@@ -39,6 +40,7 @@ LXPANEL_DECLARE_BUILTIN_APPLET(ShowDesktopApplet)
 LXPANEL_DECLARE_BUILTIN_APPLET(NetStatusApplet)
 LXPANEL_DECLARE_BUILTIN_APPLET(BlankApplet)
 LXPANEL_DECLARE_BUILTIN_APPLET(PagerApplet)
+LXPANEL_DECLARE_BUILTIN_APPLET(TaskApplet)
 
 AppletManager::AppletManager() {
 
@@ -56,6 +58,7 @@ void AppletManager::init() {
   knownApplets_.insert("netstatus", new NetStatusAppletFactory());
   knownApplets_.insert("blank", new BlankAppletFactory());
   knownApplets_.insert("pager", new PagerAppletFactory());
+  knownApplets_.insert("task", new TaskAppletFactory());
 
   // find dynamic applets modules from module dirs
   QDir dir;

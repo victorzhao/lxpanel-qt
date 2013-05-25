@@ -58,7 +58,7 @@ Panel::Panel():
   // layout_->setSizeConstraint(QLayout::SetNoConstraint);
   setLayout(layout_);
 }
-
+  
 Panel::~Panel() {
 }
 

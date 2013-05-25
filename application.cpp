@@ -108,6 +108,7 @@ bool Application::loadConfigFile(QString path) {
         Panel *panel = new Panel();
         if(panel->load(element)) {
           addPanel(panel);
+	  qDebug("panel loaded");
         }
         else {
           delete panel;

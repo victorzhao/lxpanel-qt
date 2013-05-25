@@ -27,7 +27,7 @@ Build Type=Debug
 CMake Binary=file:///usr/bin/cmake
 Environment Profile=
 Extra Arguments=
-Install Directory=
+Install Directory=file:///usr/local
 
 [Launch]
 Launch Configurations=Launch Configuration 0
@@ -55,3 +55,6 @@ Number Of Jobs=1
 
 [Project]
 VersionControlSupport=kdevgit
+
+[SourceFileTemplates]
+LastUsedTemplate=/home/pcman/.kde4/share/apps/kdevfiletemplates/template_descriptions/cpp_basic.desktop

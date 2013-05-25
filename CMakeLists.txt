@@ -77,6 +77,10 @@ set(lxpanel_qt_SRCS
   applets/netstatus/netstatusapplet.cpp
   applets/blank/blankapplet.cpp
   applets/pager/pagerapplet.cpp
+  applets/task/taskapplet.cpp
+  applets/task/taskmanager.cpp
+  applets/task/taskinfo.cpp
+  applets/task/elidingbutton.cpp
 )
 
 add_definitions(
