@@ -48,11 +48,6 @@ Panel::Panel():
   setAttribute(Qt::WA_X11NetWmWindowTypeDock);
   setAttribute(Qt::WA_AlwaysShowToolTips);
 
-  NETWinInfo winInfo(QX11Info::display(), Window(winId()),
-                     QX11Info::appRootWindow(), NETWinInfo::WMState);
-  
-  winInfo.setState(NETWinInfo::Sticky, NETWinInfo::Sticky);
-
   // FIXME: this does not work at all
   setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 
