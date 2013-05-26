@@ -18,55 +18,50 @@
  *
  */
 
-#ifndef LXPANEL_TASKAPPLET_H
-#define LXPANEL_TASKAPPLET_H
+#ifndef LXPANEL_TASKBUTTON_H
+#define LXPANEL_TASKBUTTON_H
 
-#include "../../applet.h"
-
-#include <QWidget>
-#include <QBoxLayout>
-#include <QButtonGroup>
-#include "taskmanager.h"
+#include "elidingbutton.h"
+#include "taskinfo.h"
 
 namespace Lxpanel {
-
-class TaskButton;
-
-class TaskApplet : public Applet {
+  
+class TaskButton: public Amarok::ElidingButton {
   Q_OBJECT
 public:
+  TaskButton(TaskInfo* task, QWidget* parent = 0);
+  virtual ~TaskButton();
 
-  TaskApplet(QWidget* parent);
-  ~TaskApplet();
-
-  virtual QWidget* widget() {
-    return widget_;
-  }
-  
-  virtual bool expand() {
-    return true;
+  TaskInfo* task() const {
+    return task_;
   }
 
-  virtual bool loadSettings(QDomElement& element);
-  virtual bool saveSettings(QDomElement& element) ;
+  virtual void contextMenuEvent(QContextMenuEvent * event);
 
 private Q_SLOTS:
-  void onTaskAdded(TaskInfo* task);
-  void onTaskRemoved(TaskInfo* task);
-  void onActiveChanged(TaskInfo* task);
-
-  void onButtonClicked(QAbstractButton* abutton);
-
-private:
-  TaskButton* addButton(TaskInfo* task);
-  TaskButton* findButton(TaskInfo* task);
   
-private:
-  QWidget* widget_;
-  TaskManager taskManager_;
-  QBoxLayout* layout_;
-  QButtonGroup* buttonGroup_;
-};
-}
+  // layers
+  void onKeepAbove();
+  void onKeepBelow();
+  void onNormalLayer();
 
-#endif // LXPANEL_TASKAPPLET_H
+  // send to
+  void onSendToDesktop();
+  void onSendToCurrentDesktop();
+
+  // general operations
+  void onMaximize();
+  void onRestore();
+  void onMinimize();
+  void onShade();
+  void onMove();
+  void onResize();
+  void onClose();
+
+private:
+  TaskInfo* task_;
+};
+
+};
+
+#endif // LXPANEL_TASKBUTTON_H

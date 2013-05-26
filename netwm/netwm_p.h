@@ -81,7 +81,9 @@ private:
 **/
 
 struct NETRootInfoPrivate {
-    NET::Role role;
+    // NOTE: We make role a constant containing NET::Client only since we don't need code for window managers
+    // Hope that compilers are smart enough optimize out code in if(p->role == WindowManager) blocks.
+    static const NET::Role role;
 
     // information about the X server
     Display *display;

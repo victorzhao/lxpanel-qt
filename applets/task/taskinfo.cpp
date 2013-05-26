@@ -40,8 +40,9 @@ static unsigned long windows_properties[2] = {
   NET::WM2WindowRole
 };
 
-TaskInfo::TaskInfo(Window window):
+TaskInfo::TaskInfo(TaskManager* manager, Window window):
   NETWinInfo(QX11Info::display(), window, QX11Info::appRootWindow(), windows_properties, 2),
+  manager_(manager),
   window_(window) {
 
 }
@@ -66,4 +67,44 @@ QPixmap TaskInfo::iconPixmap(int size) {
       return QPixmap::fromImage(image);
   }
   return QPixmap();
+}
+
+// taken from KDE kdeui kwindowsystem.cpp
+static void sendClientMessageToRoot(Window w, Atom a, long x, long y = 0, long z = 0) {
+  XEvent ev;
+  long mask;
+
+  memset(&ev, 0, sizeof(ev));
+  ev.xclient.type = ClientMessage;
+  ev.xclient.window = w;
+  ev.xclient.message_type = a;
+  ev.xclient.format = 32;
+  ev.xclient.data.l[0] = x;
+  ev.xclient.data.l[1] = y;
+  ev.xclient.data.l[2] = z;
+  mask = SubstructureRedirectMask;
+  XSendEvent(QX11Info::display(), QX11Info::appRootWindow(), False, mask, &ev);
+}
+
+void TaskInfo::setKeepAbove() {
+
+}
+
+void TaskInfo::setKeepBelow() {
+
+}
+
+void TaskInfo::setMaximized() {
+
+}
+
+void TaskInfo::setMinimized() {
+  // sendClientMessageToRoot(window_, kde_wm_change_state, IconicState, 1);
+
+  QX11Info inf;
+  XIconifyWindow(QX11Info::display(), window_, inf.screen());
+}
+
+void TaskInfo::setShaded() {
+
 }

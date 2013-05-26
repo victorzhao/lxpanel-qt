@@ -80,6 +80,7 @@ set(lxpanel_qt_SRCS
   applets/task/taskapplet.cpp
   applets/task/taskmanager.cpp
   applets/task/taskinfo.cpp
+  applets/task/taskbutton.cpp
   applets/task/elidingbutton.cpp
 )
 

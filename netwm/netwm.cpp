@@ -23,6 +23,9 @@
 
 */
 
+// The code is taken from KDE project kdeui module. Few modifications were done
+// by Hong Jen Yee to make it compile in lxpanel-qt and to remove KDE dependency.
+
 //#define NETWMDEBUG
 
 #include "netwm.h"
@@ -42,6 +45,10 @@
 #include <stdlib.h>
 
 #include <X11/Xmd.h>
+
+// NOTE: We make role a constant containing NET::Client only since we don't need code for window managers
+// Hope that compilers are smart enough optimize out code in if(p->role == WindowManager) blocks.
+const NET::Role NETRootInfoPrivate::role = NET::Client;
 
 // UTF-8 string
 static Atom UTF8_STRING = 0;
@@ -638,6 +645,8 @@ Z& NETRArray<Z>::operator[](int index) {
 
 // Construct a new NETRootInfo object.
 
+#if 0 // we don't need window manager stuff
+
 NETRootInfo::NETRootInfo(Display* display, Window supportWindow, const char* wmName,
                          const unsigned long properties[], int properties_size,
                          int screen, bool doActivate) {
@@ -692,6 +701,7 @@ NETRootInfo::NETRootInfo(Display* display, Window supportWindow, const char* wmN
   if(doActivate) activate();
 }
 
+#endif // #if 0
 
 NETRootInfo::NETRootInfo(Display* display, const unsigned long properties[], int properties_size,
                          int screen, bool doActivate) {
@@ -749,7 +759,7 @@ NETRootInfo::NETRootInfo(Display* display, const unsigned long properties[], int
   for(int i = 0; i < PROPERTIES_SIZE; ++i)
     p->properties[ i ] = 0;
 
-  p->role = Client;
+  // p->role = Client;
 
   if(! netwm_atoms_created) create_netwm_atoms(p->display);
 
@@ -796,7 +806,7 @@ NETRootInfo::NETRootInfo(Display* display, unsigned long properties, int screen,
   for(int i = 0; i < PROPERTIES_SIZE; ++i)
     p->properties[ i ] = 0;
 
-  p->role = Client;
+  // p->role = Client;
 
   if(! netwm_atoms_created) create_netwm_atoms(p->display);
 

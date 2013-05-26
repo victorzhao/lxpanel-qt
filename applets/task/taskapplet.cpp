@@ -21,25 +21,9 @@
 #include "taskapplet.h"
 #include "taskinfo.h"
 #include <QIcon>
+#include "taskbutton.h"
 
 using namespace Lxpanel;
-
-TaskButton::TaskButton(TaskInfo* task, QWidget* parent):
-  Amarok::ElidingButton(parent),
-  task_(task) {
-
-  setCheckable(true);
-  QString title = task->title();
-  setText(title);
-  setToolTip(title);
-  QPixmap pixmap = task->iconPixmap(24);
-  QIcon icon(pixmap);
-  setIcon(icon);
-}
-
-TaskButton::~TaskButton() {
-}
-
 
 TaskApplet::TaskApplet(QWidget* parent):
   Applet(parent),
@@ -128,7 +112,7 @@ void TaskApplet::onTaskRemoved(TaskInfo* task) {
 void TaskApplet::onButtonClicked(QAbstractButton* abutton) {
   TaskButton* button = static_cast<TaskButton*>(abutton);
   TaskInfo* task = button->task();
-  taskManager_.setActive(task);
+  task->setActive();
 }
 
 void TaskApplet::onActiveChanged(TaskInfo* task) {

@@ -46,7 +46,7 @@ TaskManager::TaskManager(QObject* parent):
   const Window* windows = clientList();
   for(int i = 0; i < nWindows; ++i) {
     const Window window = windows[i];
-    TaskInfo* task = new TaskInfo(window);
+    TaskInfo* task = new TaskInfo(this, window);
     tasks_.insert(window, task);
   }
 }
@@ -80,7 +80,7 @@ bool TaskManager::x11EventFilter(XEvent* event) {
 
 void TaskManager::addClient(Window window) {
   NETRootInfo::addClient(window);
-  TaskInfo* task = new TaskInfo(window);
+  TaskInfo* task = new TaskInfo(this, window);
   tasks_.insert(window, task);
   Q_EMIT taskAdded(task);
 }
@@ -96,6 +96,4 @@ void TaskManager::removeClient(Window window) {
   }
 }
 
-void TaskManager::setActive(TaskInfo* task) {
-  setActiveWindow(task->window(), NET::FromTool, QX11Info::appUserTime(), 0);
-}
+

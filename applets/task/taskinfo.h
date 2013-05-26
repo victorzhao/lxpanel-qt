@@ -24,12 +24,13 @@
 #include "../../netwm/netwm.h"
 #include <QString>
 #include <QPixmap>
+#include "taskmanager.h"
 
 namespace Lxpanel {
-
+  
 class TaskInfo: public NETWinInfo {
 public:
-  TaskInfo(Window window);
+  TaskInfo(TaskManager* manager, Window window);
   ~TaskInfo();
 
   Window window() const {
@@ -39,11 +40,23 @@ public:
   QString title();
   QPixmap iconPixmap(int size);
 
+  TaskManager* manager() const {
+    return manager_;
+  }
+
+  bool active() {
+    return (manager_->activeWindow() == window_);
+  }
+
+  void setActive() {
+    manager_->setActiveWindow(window_, NET::FromTool, QX11Info::appUserTime(), 0);
+  }
+
   // window state
   bool modal() const {
     return (state() & NET::Modal) != 0;
   }
-  
+
   bool sticky() const {
     return (state() & NET::Sticky) != 0;
   }
@@ -59,11 +72,15 @@ public:
   bool maximized() const {
     return (state() & NET::Max) != 0;
   }
+  void setMaximized();
 
+  void setMinimized();
+  
   bool shaded() const {
     return (state() & NET::Shaded) != 0;
   }
-  
+  void setShaded();
+
   bool skipTaskbar() const {
     return (state() & NET::SkipTaskbar) != 0;
   }
@@ -75,10 +92,12 @@ public:
   bool keepAbove() const {
     return (state() & NET::KeepAbove) != 0;
   }
+  void setKeepAbove();
 
   bool keepBelow() const {
     return (state() & NET::KeepBelow) != 0;
   }
+  void setKeepBelow();
 
   bool hidden() const {
     return (state() & NET::Hidden) != 0;
@@ -97,8 +116,13 @@ public:
     return (!skipTaskbar() && !skipPager() && windowType(~(NET::NormalMask|NET::DialogMask)) == NET::Unknown);
   }
 
+  void close() {
+    manager_->closeWindowRequest(window_);
+  }
+
 private:
   Window window_;
+  TaskManager* manager_;
 };
 }
 

@@ -43,7 +43,6 @@ public:
     return tasks_.values();
   }
 
-  void setActive(TaskInfo* task);
   TaskInfo* active() const {
     return active_;
   }
