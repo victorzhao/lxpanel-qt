@@ -23,6 +23,8 @@
 
 #include <glib.h>
 #include <gio/gio.h>
+#include <glib-unix.h>
+#include <signal.h>
 
 #include <QDomDocument>
 #include <QFile>
@@ -47,13 +49,28 @@ Application::Application(int& argc, char** argv, int flags):
 
 Application::~Application() {
   saveSettings();
+  
+  // remove UNIX signal handlers
+  g_source_remove_by_user_data(this);
 }
 
 bool Application::handleCommandLineArgs() {
   return true;
 }
 
+gboolean Application::onUnixSignal(Application* pThis) {
+  // quit the applications cleanly when receiving SIGTERM & SIGINT
+  // FIXME: currently there is a bug in libfm causing a segfault on termination.
+  pThis->quit();
+  return FALSE;
+}
+
 void Application::init() {
+
+  // install UNIX signal handlers
+  g_unix_signal_add(SIGTERM, GSourceFunc(onUnixSignal), this);
+  g_unix_signal_add(SIGINT, GSourceFunc(onUnixSignal), this);
+
   handleCommandLineArgs();
   appletManager_.init();
 

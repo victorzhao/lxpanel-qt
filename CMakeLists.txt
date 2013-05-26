@@ -10,13 +10,15 @@ set(QT_USE_QTXML TRUE)
 # glib using pkg-config
 find_package(PkgConfig)
 pkg_check_modules(GLIB REQUIRED
-  glib-2.0
+  glib-2.0>=2.30
   gio-2.0
   gio-unix-2.0
 )
 
 pkg_check_modules(X11 REQUIRED
   x11
+  xdamage
+  xcomposite
 )
 
 pkg_check_modules(GTOP REQUIRED
@@ -77,6 +79,9 @@ set(lxpanel_qt_SRCS
   applets/task/taskinfo.cpp
   applets/task/taskbutton.cpp
   applets/task/elidingbutton.cpp
+  applets/systray/systrayapplet.cpp
+  applets/systray/trayicon.cpp
+  applets/systray/razortray.cpp
 )
 
 add_definitions(

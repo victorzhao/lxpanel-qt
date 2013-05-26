@@ -1,0 +1,14 @@
+Some code in this directory is taken from razor-qt project.
+
+git sha1: d6c908447732611f7f3a6e91dffdf8987d17fd2e
+Files taken from razor-panel:
+  trayicon.cpp
+  trayicon.h
+  razortray.cpp
+  razortray.h
+Some modifications are done to make it usable in lxpanel-qt.
+
+Original authors:
+  Alexander Sokoloff <sokoloff.a@gmail.com>
+
+License: LGPL 2

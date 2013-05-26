@@ -26,6 +26,7 @@
 #include "appletmanager.h"
 #include "desktopsettings.h"
 
+#include <glib.h>
 #include <libfm-qt/libfmqt.h>
 
 namespace Lxpanel {
@@ -95,6 +96,8 @@ protected:
   void removePanel(Panel* panel);
   
   virtual bool x11EventFilter(XEvent* event);
+
+  static gboolean onUnixSignal(Application* pThis);
 
 private Q_SLOTS:
   void onScreenResized(int screen);
