@@ -21,7 +21,6 @@
 #ifndef LXPANEL_PAGERAPPLET_H
 #define LXPANEL_PAGERAPPLET_H
 
-#include "../netwm/netwm.h"
 #include "../../applet.h"
 #include "../../application.h"
 
@@ -59,8 +58,6 @@ private:
   QBoxLayout* layout_;
   int currentDesktop_;
   int desktopCount_;
-  NETRootInfo rootInfo_;
-  static unsigned long rootProps_[2];
 };
 
 };

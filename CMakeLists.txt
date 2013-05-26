@@ -46,12 +46,6 @@ include_directories(
 
 set(CMAKE_AUTOMOC TRUE)
 
-# NETWM support taken from kdeui
-set(netwm_SRCS
-  netwm/netwm.cpp
-  netwm/kxutils.cpp
-)
-
 set(desktop_settings_SRCS
   desktopsettings.cpp
   xsettings/xsettings-client.c
@@ -59,7 +53,6 @@ set(desktop_settings_SRCS
 )
 
 set(lxpanel_qt_SRCS
-  ${netwm_SRCS}
   ${desktop_settings_SRCS}
   application.cpp
   main.cpp

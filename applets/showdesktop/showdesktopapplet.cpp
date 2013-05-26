@@ -20,9 +20,9 @@
 
 #include "showdesktopapplet.h"
 #include <QToolButton>
-
-// FIXME: add the include path
-#include "../../netwm/netwm.h"
+#include "../../xfitman.h"
+#include "../../fixx11h.h"
+#include <QX11Info>
 
 using namespace Lxpanel;
 
@@ -42,10 +42,8 @@ ShowDesktopApplet::~ShowDesktopApplet() {
 }
 
 void ShowDesktopApplet::onButtonClicked() {
-  unsigned long props[] = {0, NET::WM2ShowingDesktop};
-  NETRootInfo info(QX11Info::display(), props, 2);
-  bool show = info.showingDesktop();
-  qDebug("show: %d", show);
-  info.setShowingDesktop(!show);
+  XfitMan xfitman;
+  bool show = true; // FIXME: get current status
+  int ret = xfitman.clientMessage(QX11Info::appRootWindow(), xfitman.atom("_NET_SHOWING_DESKTOP"), show ? 1 : 0);
 }
 

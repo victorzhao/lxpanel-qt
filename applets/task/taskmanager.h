@@ -26,7 +26,7 @@
 
 #include <QIcon> // need to be in xfitman.h
 #include "../../xfitman.h"
-#include "../../netwm/fixx11h.h"
+#include "../../fixx11h.h"
 #include "../../application.h"
 
 namespace Lxpanel {

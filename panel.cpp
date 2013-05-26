@@ -31,7 +31,6 @@
 #include <QX11Info>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
-#include "netwm/netwm.h"
 
 using namespace Lxpanel;
 

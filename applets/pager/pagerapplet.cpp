@@ -24,13 +24,14 @@
 #include <QBoxLayout>
 #include <QButtonGroup>
 
-using namespace Lxpanel;
+#include <QX11Info>
+#include "../../xfitman.h"
+#include "../../fixx11h.h"
 
-unsigned long PagerApplet::rootProps_[2] = {NET::NumberOfDesktops|NET::CurrentDesktop|NET::DesktopNames, 0};
+using namespace Lxpanel;
 
 PagerApplet::PagerApplet(QWidget* parent):
   Applet(parent),
-  rootInfo_(QX11Info::display(), rootProps_, 2),
   desktopCount_(0),
   currentDesktop_(0),
   layout_(new QBoxLayout(QBoxLayout::LeftToRight)),
@@ -39,7 +40,7 @@ PagerApplet::PagerApplet(QWidget* parent):
 
   Application* app = static_cast<Application*>(qApp);
   app->addXEventFilter(this);
-    
+
   frame_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
   layout_->setMargin(0);
   layout_->setContentsMargins(0, 0, 0, 0);
@@ -62,19 +63,20 @@ PagerApplet::~PagerApplet() {
 }
 
 void PagerApplet::reloadButtons() {
-  // FIXME: remove all existing buttons
+  // remove all existing buttons
   Q_FOREACH(QAbstractButton* oldBtn, group_->buttons()) {
     delete oldBtn;
   }
-  desktopCount_ = rootInfo_.numberOfDesktops();
-  currentDesktop_ = rootInfo_.currentDesktop();
+  XfitMan xfitman;
+  desktopCount_ = xfitman.getNumDesktop();
+  currentDesktop_ = xfitman.getActiveDesktop();
   QString title("%1");
-  for(int i = 1; i <= desktopCount_; ++i) {
+  for(int i = 0; i < desktopCount_; ++i) {
     QToolButton* btn = new QToolButton(frame_);
     btn->setCheckable(true);
-    btn->setText(title.arg(i));
-    const char* name = rootInfo_.desktopName(i);
-    btn->setToolTip(QString::fromUtf8(name));
+    btn->setText(title.arg(i + 1));
+    QString name = xfitman.getDesktopName(i);
+    btn->setToolTip(name);
     layout_->addWidget(btn);
     group_->addButton(btn, i);
     if(i == currentDesktop_)
@@ -84,22 +86,29 @@ void PagerApplet::reloadButtons() {
 
 void PagerApplet::onButtonClicked(int id) {
   if(id != currentDesktop_) {
-    unsigned long props[] = {NET::CurrentDesktop, 0};
+    XfitMan xfitman;
     currentDesktop_ = id;
-    rootInfo_.setCurrentDesktop(currentDesktop_);
+    xfitman.setActiveDesktop(currentDesktop_);
   }
 }
 
 bool PagerApplet::x11EventFilter(XEvent* event) {
-  unsigned long ret = rootInfo_.event(event);
-  if(ret & NET::NumberOfDesktops) {
-    reloadButtons();
-  }
-  if(ret & NET::CurrentDesktop) {
-    currentDesktop_ = rootInfo_.currentDesktop();
-    QAbstractButton* btn = group_->button(currentDesktop_);
-    if(btn)
-      btn->setChecked(true);
+  XfitMan xfitman;
+  if(event->type == PropertyNotify) {
+    if(event->xany.window == QX11Info::appRootWindow()) {
+      if(event->xproperty.atom == xfitman.atom("_NET_NUMBER_OF_DESKTOPS")) {
+        reloadButtons();
+      }
+      else if(event->xproperty.atom == xfitman.atom("_NET_DESKTOP_NAMES")) {
+        reloadButtons(); // FIXME: only update desktop names
+      }
+      else if(event->xproperty.atom == xfitman.atom("_NET_CURRENT_DESKTOP")) {
+        currentDesktop_ = xfitman.getActiveDesktop();
+        QAbstractButton* btn = group_->button(currentDesktop_);
+        if(btn)
+          btn->setChecked(true);
+      }
+    }
   }
   return false;
 }

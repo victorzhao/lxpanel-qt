@@ -23,7 +23,7 @@ Install Directory=file:///usr/local
 
 [CMake][CMake Build Directory 2]
 Build Directory Path=file:///home/pcman/Projects/lxde/lxpanel-qt/build
-Build Type=Debug
+Build Type=
 CMake Binary=file:///usr/bin/cmake
 Environment Profile=
 Extra Arguments=
@@ -51,7 +51,7 @@ Working Directory=
 isExecutable=false
 
 [MakeBuilder]
-Number Of Jobs=1
+Number Of Jobs=3
 
 [Project]
 VersionControlSupport=kdevgit

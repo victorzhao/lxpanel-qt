@@ -19,7 +19,6 @@
  */
 
 #include "taskinfo.h"
-#include "../../netwm/netwm.h"
 #include <QImage>
 
 using namespace Lxpanel;
