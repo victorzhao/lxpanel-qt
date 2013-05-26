@@ -134,7 +134,6 @@ void TaskManager::addClient(Window window) {
 
 void TaskManager::removeClient(Window window) {
   QHash<Window, TaskInfo*>::iterator it = tasks_.find(window);
-
   if(it != tasks_.end()) {
     TaskInfo* task = *it;
     Q_EMIT taskRemoved(task);

@@ -46,10 +46,6 @@ public:
     return manager_;
   }
 
-  XfitMan& xfitMan() {
-    return manager_->xfitMan();
-  }
-
   bool active() {
     return (xfitMan().getActiveWindow() == window_);
   }

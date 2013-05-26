@@ -94,13 +94,11 @@ void TaskApplet::onTaskAdded(TaskInfo* task) {
 }
 
 void TaskApplet::onTaskRemoved(TaskInfo* task) {
-  if(!task->skipTaskbar() && !task->skipPager()) {
-    TaskButton* button = findButton(task);
-    if(button) {
-      layout_->removeWidget(button);
-      buttonGroup_->removeButton(button);
-      delete button;
-    }
+  TaskButton* button = findButton(task);
+  if(button) {
+    layout_->removeWidget(button);
+    buttonGroup_->removeButton(button);
+    delete button;
   }
 }
 
