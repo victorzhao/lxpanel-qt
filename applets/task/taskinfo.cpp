@@ -38,3 +38,15 @@ QPixmap TaskInfo::iconPixmap(int size) {
   xfitMan().getClientIcon(window_, pixmap);
   return pixmap;
 }
+
+#include <QX11Info>
+TaskInfo::ChangeType TaskInfo::x11EventFilter(XEvent* event) {
+  ChangeType change = NoChange;
+  if(event->xproperty.atom == xfitMan().atom("_NET_WM_STATE"))
+    change = TaskInfo::StateChanged;
+  else if(event->xproperty.atom == xfitMan().atom("_NET_WM_VISIBLE_NAME") || event->xproperty.atom == xfitMan().atom("_NET_WM_NAME"))
+    change = TaskInfo::TitleChanged;
+  else if(event->xproperty.atom == xfitMan().atom("_NET_WM_ICON"))
+    change = TaskInfo::IconChanged;
+  return change;
+}

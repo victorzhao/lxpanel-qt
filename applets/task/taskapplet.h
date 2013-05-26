@@ -54,6 +54,7 @@ private Q_SLOTS:
   void onTaskAdded(TaskInfo* task);
   void onTaskRemoved(TaskInfo* task);
   void onActiveChanged(TaskInfo* task);
+  void onTaskChanged(TaskInfo* task, TaskInfo::ChangeType changed);
 
   void onButtonClicked(QAbstractButton* abutton);
 

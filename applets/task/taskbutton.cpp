@@ -131,3 +131,23 @@ void TaskButton::onSendToCurrentDesktop() {
 void TaskButton::onSendToDesktop() {
 
 }
+
+void TaskButton::update(TaskInfo::ChangeType changed) {
+  switch(changed) {
+    case TaskInfo::StateChanged:
+      break;
+    case TaskInfo::TitleChanged: {
+      QString title = task_->title();
+      setText(title);
+      setToolTip(title);
+      break;
+    }
+    case TaskInfo::IconChanged: {
+      QPixmap pixmap = task_->iconPixmap(24);
+      QIcon icon(pixmap);
+      setIcon(icon);
+      break;
+    }
+  }
+}
+

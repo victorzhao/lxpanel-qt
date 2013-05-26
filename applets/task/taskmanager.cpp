@@ -21,6 +21,7 @@
 #include "taskmanager.h"
 #include "taskinfo.h"
 #include <QX11Info>
+#include <QWidget>
 
 using namespace Lxpanel;
 
@@ -34,8 +35,7 @@ TaskManager::TaskManager(QObject* parent):
 
   clientWindows_ = xfitman_.getClientList();
   Q_FOREACH(Window window, clientWindows_) {
-    TaskInfo* task = new TaskInfo(this, window);
-    tasks_.insert(window, task);
+    addClient(window, false);
   }
 }
 
@@ -76,12 +76,10 @@ bool TaskManager::x11EventFilter(XEvent* event) {
       else if(event->xproperty.atom == xfitman_.atom("_NET_ACTIVE_WINDOW")) {
         Window window = xfitman_.getActiveWindow();
         QHash<Window, TaskInfo*>::iterator it = tasks_.find(window);
-
         if(it != tasks_.end()) // found
           active_ = *it;
         else
           active_ = NULL; // FIXME: should this happen?
-
         Q_EMIT activeChanged(active_);
       }
       else if(event->xproperty.atom == xfitman_.atom("_NET_CURRENT_DESKTOP")) {
@@ -89,10 +87,16 @@ bool TaskManager::x11EventFilter(XEvent* event) {
     }
     else {
       QHash<Window, TaskInfo*>::iterator it = tasks_.find(event->xany.window);
-
       if(it != tasks_.end()) {
         TaskInfo* task = *it;
-        // Q_EMIT taskChanged(task, mask);
+        TaskInfo::ChangeType changed = task->x11EventFilter(event);
+        if(changed != TaskInfo::NoChange)
+          Q_EMIT taskChanged(task, changed);
+        else {
+          if(event->xproperty.atom == xfitMan().atom("_NET_WM_WINDOW_TYPE")) {
+            // FIXME: check if the window should be shown in the taskbar
+          }
+        }
       }
     }
   }
@@ -126,10 +130,14 @@ bool TaskManager::x11EventFilter(XEvent* event) {
   return false;
 }
 
-void TaskManager::addClient(Window window) {
+void TaskManager::addClient(Window window, bool emitSignal) {
   TaskInfo* task = new TaskInfo(this, window);
   tasks_.insert(window, task);
-  Q_EMIT taskAdded(task);
+  // We need to do select input for this window. Otherwise we won't get its events.
+  if(!QWidget::find(window))
+    ::XSelectInput(QX11Info::display(), window, PropertyChangeMask|StructureNotifyMask);
+  if(emitSignal)
+    Q_EMIT taskAdded(task);
 }
 
 void TaskManager::removeClient(Window window) {

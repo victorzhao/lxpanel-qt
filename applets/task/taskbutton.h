@@ -40,6 +40,8 @@ public:
   virtual void moveEvent(QMoveEvent* event);
   virtual void resizeEvent(QResizeEvent* event);
 
+  void update(TaskInfo::ChangeType changed);
+
 private Q_SLOTS:
   
   // layers

@@ -49,6 +49,7 @@ TaskApplet::TaskApplet(QWidget* parent):
 
   connect(&taskManager_, SIGNAL(taskAdded(TaskInfo*)), SLOT(onTaskAdded(TaskInfo*)));
   connect(&taskManager_, SIGNAL(taskRemoved(TaskInfo*)),  SLOT(onTaskRemoved(TaskInfo*)));
+  connect(&taskManager_, SIGNAL(taskChanged(TaskInfo*,TaskInfo::ChangeType)), SLOT(onTaskChanged(TaskInfo*,TaskInfo::ChangeType)));
   connect(&taskManager_, SIGNAL(activeChanged(TaskInfo*)), SLOT(onActiveChanged(TaskInfo*)));
 
   connect(buttonGroup_, SIGNAL(buttonClicked(QAbstractButton*)), SLOT(onButtonClicked(QAbstractButton*)));
@@ -123,3 +124,8 @@ void TaskApplet::onActiveChanged(TaskInfo* task) {
   }
 }
 
+void TaskApplet::onTaskChanged(TaskInfo* task, TaskInfo::ChangeType changed) {
+  TaskButton* button = findButton(task);
+  if(button)
+    button->update(changed);
+}

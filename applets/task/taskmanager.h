@@ -29,14 +29,15 @@
 #include "../../fixx11h.h"
 #include "../../application.h"
 
-namespace Lxpanel {
+#include "taskinfo.h"
 
-class TaskInfo;
+namespace Lxpanel {
 
 class TaskManager : public QObject, public XEventFilter {
   Q_OBJECT
 
 public:
+  
   TaskManager(QObject* parent = 0);
   ~TaskManager();
 
@@ -56,11 +57,11 @@ public:
 Q_SIGNALS:
   void taskAdded(TaskInfo* task);
   void taskRemoved(TaskInfo* task);
-  void taskChanged(TaskInfo* task, unsigned long changedMask);
+  void taskChanged(TaskInfo* task, TaskInfo::ChangeType changed);
   void activeChanged(TaskInfo* currentTask);
 
 protected:
-  virtual void addClient(Window window);
+  virtual void addClient(Window window, bool emitSignal = true);
   virtual void removeClient(Window window);
   void updateClients();
 

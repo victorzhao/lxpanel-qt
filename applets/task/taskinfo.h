@@ -23,12 +23,24 @@
 
 #include <QString>
 #include <QPixmap>
-#include "taskmanager.h"
+
+#include "../../xfitman.h"
+#include "../../fixx11h.h"
 
 namespace Lxpanel {
+
+class TaskManager;
   
 class TaskInfo {
 public:
+
+  enum ChangeType {
+    NoChange,
+    TitleChanged,
+    IconChanged,
+    StateChanged
+  };
+
   TaskInfo(TaskManager* manager, Window window);
   ~TaskInfo();
 
@@ -131,6 +143,8 @@ public:
   void close() {
     xfitMan().closeWindow(window_);
   }
+
+  ChangeType x11EventFilter(XEvent* event);
 
 private:
   Window window_;
