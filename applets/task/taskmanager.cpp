@@ -20,32 +20,20 @@
 
 #include "taskmanager.h"
 #include "taskinfo.h"
+#include <QX11Info>
 
 using namespace Lxpanel;
 
-static unsigned long desktop_properties[ 2 ] = {
-  NET::ActiveWindow|
-  NET::ClientList|
-  NET::ClientListStacking|
-  NET::CurrentDesktop|
-  // NET::DesktopViewport |
-  NET::NumberOfDesktops|
-  NET::Supported,
-  NET::WM2ShowingDesktop
-};
-
 TaskManager::TaskManager(QObject* parent):
   QObject(parent),
-  NETRootInfo(QX11Info::display(), desktop_properties, 2),
+  xfitman_(),
   active_(NULL) {
 
   Application* app = static_cast<Application*>(qApp);
   app->addXEventFilter(this);
-  
-  int nWindows = clientListCount();
-  const Window* windows = clientList();
-  for(int i = 0; i < nWindows; ++i) {
-    const Window window = windows[i];
+
+  clientWindows_ = xfitman_.getClientList();
+  Q_FOREACH(Window window, clientWindows_) {
     TaskInfo* task = new TaskInfo(this, window);
     tasks_.insert(window, task);
   }
@@ -56,38 +44,97 @@ TaskManager::~TaskManager() {
   app->removeXEventFilter(this);
 }
 
+void TaskManager::updateClients() {
+  // FIXME: need better algorithm to speed it up
+
+  // WindowList clientsToRemove;
+  // WindowList clientsToAdd;
+  WindowList newClientWindows = xfitman_.getClientList();
+  Q_FOREACH(Window window, clientWindows_) {
+    if(!newClientWindows.contains(window)) {
+      // clientsToRemove.append(window);
+      removeClient(window);
+    }
+  }
+
+  Q_FOREACH(Window window, newClientWindows) {
+    if(!clientWindows_.contains(window)) {
+      // clientsToAdd.append(window);
+      addClient(window);
+    }
+  }
+
+  clientWindows_ = newClientWindows;
+}
+
 bool TaskManager::x11EventFilter(XEvent* event) {
+  if(event->type == PropertyNotify) {
+    if(event->xany.window == QX11Info::appRootWindow()) {
+      if(event->xproperty.atom == xfitman_.atom("_NET_CLIENT_LIST")) {
+        updateClients();
+      }
+      else if(event->xproperty.atom == xfitman_.atom("_NET_ACTIVE_WINDOW")) {
+        Window window = xfitman_.getActiveWindow();
+        QHash<Window, TaskInfo*>::iterator it = tasks_.find(window);
+
+        if(it != tasks_.end()) // found
+          active_ = *it;
+        else
+          active_ = NULL; // FIXME: should this happen?
+
+        Q_EMIT activeChanged(active_);
+      }
+      else if(event->xproperty.atom == xfitman_.atom("_NET_CURRENT_DESKTOP")) {
+      }
+    }
+    else {
+      QHash<Window, TaskInfo*>::iterator it = tasks_.find(event->xany.window);
+
+      if(it != tasks_.end()) {
+        TaskInfo* task = *it;
+        // Q_EMIT taskChanged(task, mask);
+      }
+    }
+  }
+
+#if 0
   long changedProps = NETRootInfo::event(event);
+
   if(changedProps) {
     if(changedProps & NET::ActiveWindow) {
       Window window = activeWindow();
       QHash<Window, TaskInfo*>::iterator it = tasks_.find(window);
+
       if(*it != active_) {
-	active_ = *it;
-	Q_EMIT activeChanged(active_);
+        active_ = *it;
+        Q_EMIT activeChanged(active_);
       }
     }
   }
+
   QHash<Window, TaskInfo*>::iterator it = tasks_.find(event->xany.window);
+
   if(it != tasks_.end()) {
     TaskInfo* task = *it;
     unsigned long mask = task->event(event);
+
     if(mask != 0)
       Q_EMIT taskChanged(task, mask);
   }
+
+#endif
   return false;
 }
 
 void TaskManager::addClient(Window window) {
-  NETRootInfo::addClient(window);
   TaskInfo* task = new TaskInfo(this, window);
   tasks_.insert(window, task);
   Q_EMIT taskAdded(task);
 }
 
 void TaskManager::removeClient(Window window) {
-  NETRootInfo::removeClient(window);
   QHash<Window, TaskInfo*>::iterator it = tasks_.find(window);
+
   if(it != tasks_.end()) {
     TaskInfo* task = *it;
     Q_EMIT taskRemoved(task);
@@ -95,5 +142,4 @@ void TaskManager::removeClient(Window window) {
     tasks_.erase(it);
   }
 }
-
 

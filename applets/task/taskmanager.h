@@ -24,14 +24,16 @@
 #include <QObject>
 #include <QHash>
 
-#include "../../netwm/netwm.h"
+#include <QIcon> // need to be in xfitman.h
+#include "../../xfitman.h"
+#include "../../netwm/fixx11h.h"
 #include "../../application.h"
 
 namespace Lxpanel {
 
 class TaskInfo;
 
-class TaskManager : public QObject, public NETRootInfo, public XEventFilter {
+class TaskManager : public QObject, public XEventFilter {
   Q_OBJECT
 
 public:
@@ -46,6 +48,10 @@ public:
   TaskInfo* active() const {
     return active_;
   }
+  
+  XfitMan& xfitMan() {
+    return xfitman_;
+  }
 
 Q_SIGNALS:
   void taskAdded(TaskInfo* task);
@@ -56,10 +62,13 @@ Q_SIGNALS:
 protected:
   virtual void addClient(Window window);
   virtual void removeClient(Window window);
-  
+  void updateClients();
+
 private:
   QHash<Window, TaskInfo*> tasks_;
   TaskInfo* active_;
+  XfitMan xfitman_;
+  WindowList clientWindows_;
 };
 }
 

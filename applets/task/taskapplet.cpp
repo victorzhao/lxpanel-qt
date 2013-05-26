@@ -37,7 +37,7 @@ TaskApplet::TaskApplet(QWidget* parent):
   layout_->addStretch(1);
   widget_->setLayout(layout_);
 
-  Window active = taskManager_.activeWindow();
+  Window active = xfitMan().getActiveWindow();
   QList<TaskInfo*> tasks = taskManager_.tasks();
   Q_FOREACH(TaskInfo* task, tasks) {
     if(task->showInTaskbar()) {
@@ -82,23 +82,18 @@ TaskButton* TaskApplet::addButton(TaskInfo* task) {
   TaskButton* button = new TaskButton(task);
   button->setMaximumWidth(150);
   button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-qDebug("task: %s", task->visibleName());
-qDebug("role: %d", task->windowRole());
-qDebug("state: %d", task->state());
   layout_->insertWidget(layout_->count() - 1, button, 0, Qt::AlignLeft);
   buttonGroup_->addButton(button);
   return button;
 }
 
 void TaskApplet::onTaskAdded(TaskInfo* task) {
-  qDebug("added: %s", task->visibleName());
   if(task->showInTaskbar()) {
     TaskButton* button = addButton(task);
   }
 }
 
 void TaskApplet::onTaskRemoved(TaskInfo* task) {
-  qDebug("removed: %s", task->visibleName());
   if(!task->skipTaskbar() && !task->skipPager()) {
     TaskButton* button = findButton(task);
     if(button) {

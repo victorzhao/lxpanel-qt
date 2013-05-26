@@ -24,24 +24,7 @@
 
 using namespace Lxpanel;
 
-static unsigned long windows_properties[2] = {
-  NET::WMDesktop|
-  NET::WMIcon|
-  NET::WMIconName|
-  NET::WMName|
-  NET::WMPid|
-  NET::WMState|
-  NET::WMVisibleIconName|
-  NET::WMVisibleName|
-  NET::WMWindowType,
-  NET::WM2AllowedActions|
-  NET::WM2GroupLeader|
-  NET::WM2WindowClass|
-  NET::WM2WindowRole
-};
-
 TaskInfo::TaskInfo(TaskManager* manager, Window window):
-  NETWinInfo(QX11Info::display(), window, QX11Info::appRootWindow(), windows_properties, 2),
   manager_(manager),
   window_(window) {
 
@@ -51,60 +34,8 @@ TaskInfo::~TaskInfo() {
 
 }
 
-QString TaskInfo::title() {
-  const char* _title = visibleName();
-  if(!_title)
-    _title = name();
-  return QString::fromUtf8(_title);
-}
-
 QPixmap TaskInfo::iconPixmap(int size) {
-  NETIcon iconData = icon(size, size);
-  if(iconData.data && iconData.size.width > 0 && iconData.size.height > 0) {
-    QImage image(iconData.data, iconData.size.width, iconData.size.height, QImage::Format_ARGB32);
-    image = image.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    if(!image.isNull())
-      return QPixmap::fromImage(image);
-  }
-  return QPixmap();
-}
-
-// taken from KDE kdeui kwindowsystem.cpp
-static void sendClientMessageToRoot(Window w, Atom a, long x, long y = 0, long z = 0) {
-  XEvent ev;
-  long mask;
-
-  memset(&ev, 0, sizeof(ev));
-  ev.xclient.type = ClientMessage;
-  ev.xclient.window = w;
-  ev.xclient.message_type = a;
-  ev.xclient.format = 32;
-  ev.xclient.data.l[0] = x;
-  ev.xclient.data.l[1] = y;
-  ev.xclient.data.l[2] = z;
-  mask = SubstructureRedirectMask;
-  XSendEvent(QX11Info::display(), QX11Info::appRootWindow(), False, mask, &ev);
-}
-
-void TaskInfo::setKeepAbove() {
-
-}
-
-void TaskInfo::setKeepBelow() {
-
-}
-
-void TaskInfo::setMaximized() {
-
-}
-
-void TaskInfo::setMinimized() {
-  // sendClientMessageToRoot(window_, kde_wm_change_state, IconicState, 1);
-
-  QX11Info inf;
-  XIconifyWindow(QX11Info::display(), window_, inf.screen());
-}
-
-void TaskInfo::setShaded() {
-
+  QPixmap pixmap;
+  xfitMan().getClientIcon(window_, pixmap);
+  return pixmap;
 }

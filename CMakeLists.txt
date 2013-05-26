@@ -69,6 +69,8 @@ set(lxpanel_qt_SRCS
   appletplugin.cpp
   appletfactory.cpp
   appletpluginfactory.cpp
+  # xfitman taken from razor-qt
+  xfitman.cpp
   # built-in applets
   applets/clock/clockapplet.cpp
   applets/showdesktop/showdesktopapplet.cpp

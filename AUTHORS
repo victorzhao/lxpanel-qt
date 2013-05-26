@@ -1,0 +1,9 @@
+Main developers:
+  Hong Jen Yee (PCMan) <pcman.tw@gmail.com>
+
+Some code is taken from other projects.
+xfitman.cpp & xfitman.h:
+ Taken from razor-qt (git sha1: d6c908447732611f7f3a6e91dffdf8987d17fd2e)
+ Copyright (C) 2010-2011 Razor team
+ Authors: Christopher "VdoP" Regali, Alexander Sokoloff <sokoloff.a@gmail.com>
+ License: LGPL 2

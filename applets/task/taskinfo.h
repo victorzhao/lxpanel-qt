@@ -21,14 +21,13 @@
 #ifndef LXPANEL_TASKINFO_H
 #define LXPANEL_TASKINFO_H
 
-#include "../../netwm/netwm.h"
 #include <QString>
 #include <QPixmap>
 #include "taskmanager.h"
 
 namespace Lxpanel {
   
-class TaskInfo: public NETWinInfo {
+class TaskInfo {
 public:
   TaskInfo(TaskManager* manager, Window window);
   ~TaskInfo();
@@ -37,92 +36,110 @@ public:
     return window_;
   }
 
-  QString title();
+  QString title() {
+    return xfitMan().getWindowTitle(window_);
+  }
+
   QPixmap iconPixmap(int size);
 
   TaskManager* manager() const {
     return manager_;
   }
 
+  XfitMan& xfitMan() {
+    return manager_->xfitMan();
+  }
+
   bool active() {
-    return (manager_->activeWindow() == window_);
+    return (xfitMan().getActiveWindow() == window_);
   }
 
   void setActive() {
-    manager_->setActiveWindow(window_, NET::FromTool, QX11Info::appUserTime(), 0);
+    xfitMan().raiseWindow(window_);
   }
 
   // window state
   bool modal() const {
-    return (state() & NET::Modal) != 0;
+    return state_.Modal;
   }
 
   bool sticky() const {
-    return (state() & NET::Sticky) != 0;
+    return state_.Sticky;
   }
 
   bool maximizedVertically() const {
-    return (state() & NET::MaxVert) != 0;
+    return state_.MaximizedVert;
   }
 
   bool maximizedHorizontally() const {
-    return (state() & NET::MaxHoriz) != 0;
+    return state_.MaximizedHoriz;
   }
 
   bool maximized() const {
-    return (state() & NET::Max) != 0;
+    return state_.MaximizedVert && state_.MaximizedHoriz;
   }
-  void setMaximized();
+  void setMaximized() {
+    xfitMan().maximizeWindow(window_);
+  }
 
-  void setMinimized();
-  
-  bool shaded() const {
-    return (state() & NET::Shaded) != 0;
+  void setMinimized() {
+    xfitMan().minimizeWindow(window_);
   }
-  void setShaded();
+
+  bool shaded() const {
+    return state_.Shaded;
+  }
+  void setShaded(bool shade = true) {
+    xfitMan().shadeWindow(window_, shade);
+  }
 
   bool skipTaskbar() const {
-    return (state() & NET::SkipTaskbar) != 0;
+    return state_.SkipTaskBar;
   }
 
   bool skipPager() const {
-    return (state() & NET::SkipPager) != 0;
+    return state_.SkipPager;
   }
 
   bool keepAbove() const {
-    return (state() & NET::KeepAbove) != 0;
+    return state_.AboveLayer;
   }
-  void setKeepAbove();
+  void setKeepAbove() {
+    xfitMan().setWindowLayer(window_, XfitMan::LayerAbove);
+  }
 
   bool keepBelow() const {
-    return (state() & NET::KeepBelow) != 0;
+    return state_.BelowLayer;
   }
-  void setKeepBelow();
+  void setKeepBelow() {
+    xfitMan().setWindowLayer(window_, XfitMan::LayerBelow);
+  }
 
   bool hidden() const {
-    return (state() & NET::Hidden) != 0;
+    return state_.Hidden;
   }
 
   bool fullScreen() const {
-    return (state() & NET::FullScreen) != 0;
+    return state_.FullScreen;
   }
 
   bool demandsAttention() const {
-    return (state() & NET::DemandsAttention) != 0;
+    return state_.Attention;
   }
 
   // should the task be shown in the task bar
-  bool showInTaskbar() const {
-    return (!skipTaskbar() && !skipPager() && windowType(~(NET::NormalMask|NET::DialogMask)) == NET::Unknown);
+  bool showInTaskbar() {
+    return xfitMan().acceptWindow(window_);
   }
 
   void close() {
-    manager_->closeWindowRequest(window_);
+    xfitMan().closeWindow(window_);
   }
 
 private:
   Window window_;
   TaskManager* manager_;
+  WindowState state_;
 };
 }
 
