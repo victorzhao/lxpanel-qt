@@ -35,6 +35,8 @@ namespace Lxpanel {
 class Panel;
 class AppletFactory;
 
+class RunDialog;
+
 class XEventFilter {
 public:
   virtual bool x11EventFilter(XEvent * event) = 0;
@@ -105,7 +107,8 @@ protected:
 private Q_SLOTS:
   void onScreenResized(int screen);
   void onScreenCountChanged(int newCount);
-
+  void onRunDialogFinished();
+  
 private:
   QString profile_;
   QString fileManager_; // command used to launch file manager
@@ -121,6 +124,8 @@ private:
   bool isPrimaryInstance;
   QTranslator translator;
   QTranslator qtTranslator;
+  
+  RunDialog* runDialog_;
 };
 
 }

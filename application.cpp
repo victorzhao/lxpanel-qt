@@ -37,6 +37,8 @@
 #include "panel.h"
 #include "applet.h"
 
+#include "rundialog.h"
+
 using namespace Lxpanel;
 
 static const char* serviceName = "org.lxde.LxPanel";
@@ -48,6 +50,7 @@ Application::Application(int& argc, char** argv, int flags):
   iconTheme_(),
   libfmQt_(),
   appletManager_(),
+  runDialog_(NULL),
   profile_("default") {
 
   QDesktopWidget* desktopWidget = QApplication::desktop();
@@ -265,8 +268,17 @@ bool Application::x11EventFilter(XEvent* event) {
 
 void Application::run() {
   qDebug("run");
+  if(!runDialog_) {
+    runDialog_ = new RunDialog();
+    connect(runDialog_, SIGNAL(finished(int)), SLOT(onRunDialogFinished()));
+  }
+  runDialog_->show();
 }
 
+void Application::onRunDialogFinished() {
+  runDialog_->deleteLater();
+  runDialog_ = NULL;
+}
 
 #if 0
 bool Application::save_all_panels(string profile_name) {

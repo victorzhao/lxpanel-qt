@@ -65,6 +65,8 @@ set(lxpanel_qt_SRCS
   appletplugin.cpp
   appletfactory.cpp
   appletpluginfactory.cpp
+  # run dialog
+  rundialog.cpp
   # xfitman taken from razor-qt
   xfitman.cpp
   # built-in applets
@@ -93,6 +95,14 @@ qt4_add_dbus_adaptor(lxpanel_qt_SRCS
   ApplicationAdaptor
 )
 
+set(lxpanel_qt_UIS
+  rundialog.ui
+)
+
+qt4_wrap_ui(lximage_qt_UI_H
+  ${lxpanel_qt_UIS}
+)
+
 add_definitions(
   -DLXPANEL_LIB_DIR="${CMAKE_INSTALL_PREFIX}/lib/lxpanel-qt"
   -DLXPANEL_DATA_DIR="${CMAKE_INSTALL_PREFIX}/share/lxpanel-qt"
@@ -101,6 +111,7 @@ add_definitions(
 
 add_executable(lxpanel-qt
   ${lxpanel_qt_SRCS}
+  ${lximage_qt_UI_H}
 )
 
 target_link_libraries(lxpanel-qt
