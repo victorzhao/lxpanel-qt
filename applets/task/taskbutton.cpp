@@ -69,6 +69,24 @@ void TaskButton::contextMenuEvent(QContextMenuEvent* event) {
   menu->popup(buttonPos);
 }
 
+void TaskButton::moveEvent(QMoveEvent* event) {
+  Amarok::ElidingButton::moveEvent(event);
+  QRect iconRect = rect();
+  QPoint pos = iconRect.topLeft();
+  pos = mapToGlobal(pos);
+  iconRect.moveTo(pos);
+  xfitMan().setIconGeometry(task_->window(), &iconRect);
+}
+
+void TaskButton::resizeEvent(QResizeEvent* event) {
+  Amarok::ElidingButton::resizeEvent(event);
+  QRect iconRect = rect();
+  QPoint pos = iconRect.topLeft();
+  pos = mapToGlobal(pos);
+  iconRect.moveTo(pos);
+  xfitMan().setIconGeometry(task_->window(), &iconRect);
+}
+
 void TaskButton::onKeepAbove() {
   task_->setKeepAbove();
 }

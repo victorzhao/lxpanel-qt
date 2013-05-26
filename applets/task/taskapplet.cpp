@@ -107,7 +107,10 @@ void TaskApplet::onTaskRemoved(TaskInfo* task) {
 void TaskApplet::onButtonClicked(QAbstractButton* abutton) {
   TaskButton* button = static_cast<TaskButton*>(abutton);
   TaskInfo* task = button->task();
-  task->setActive();
+  if(!task->active())
+    task->setActive();
+  else
+    task->setMinimized();
 }
 
 void TaskApplet::onActiveChanged(TaskInfo* task) {

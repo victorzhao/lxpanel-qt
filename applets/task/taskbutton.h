@@ -37,6 +37,8 @@ public:
   }
 
   virtual void contextMenuEvent(QContextMenuEvent * event);
+  virtual void moveEvent(QMoveEvent* event);
+  virtual void resizeEvent(QResizeEvent* event);
 
 private Q_SLOTS:
   
