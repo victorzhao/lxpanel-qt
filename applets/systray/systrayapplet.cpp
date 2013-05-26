@@ -32,6 +32,7 @@ SysTrayApplet::SysTrayApplet(QWidget* parent):
 }
 
 SysTrayApplet::~SysTrayApplet() {
+  qDebug("delete SysTrayApplet");
   Application* app = static_cast<Application*>(qApp);
   app->removeXEventFilter(this);
   delete tray_;

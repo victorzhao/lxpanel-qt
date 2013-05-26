@@ -59,6 +59,10 @@ Panel::Panel():
 }
   
 Panel::~Panel() {
+  Q_FOREACH(Applet* applet, applets_) {
+    // FIXME: how can we unload dynamic modules?
+    delete applet;
+  }
 }
 
 #if 0

@@ -54,12 +54,12 @@ PagerApplet::PagerApplet(QWidget* parent):
 }
 
 PagerApplet::~PagerApplet() {
-  delete frame_;
-  delete group_;
-  delete layout_;
-
   Application* app = static_cast<Application*>(qApp);
   app->removeXEventFilter(this);
+
+  delete layout_;
+  delete group_;
+  delete frame_;
 }
 
 void PagerApplet::reloadButtons() {

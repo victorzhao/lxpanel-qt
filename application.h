@@ -23,6 +23,7 @@
 
 #include <QApplication>
 #include <QVector>
+#include <QTranslator>
 #include "appletmanager.h"
 #include "desktopsettings.h"
 
@@ -85,6 +86,8 @@ public:
     xeventFilters_.removeOne(filter);
   }
 
+  void run();
+  
 protected:
   bool handleCommandLineArgs();
   bool loadSettings();
@@ -115,6 +118,9 @@ private:
   QVector<Panel*> panels_; // all desktop panels
   Fm::LibFmQt libfmQt_;
   QList<XEventFilter*> xeventFilters_;
+  bool isPrimaryInstance;
+  QTranslator translator;
+  QTranslator qtTranslator;
 };
 
 }

@@ -44,6 +44,7 @@ include_directories(
   ${MENU_CACHE_INCLUDE_DIRS}
   ${LIBFM_QT_INCLUDE_DIRS}
   ${CMAKE_CURRENT_BINARY_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 set(CMAKE_AUTOMOC TRUE)
@@ -82,6 +83,14 @@ set(lxpanel_qt_SRCS
   applets/systray/systrayapplet.cpp
   applets/systray/trayicon.cpp
   applets/systray/razortray.cpp
+)
+
+qt4_add_dbus_adaptor(lxpanel_qt_SRCS
+  org.lxde.LxPanel.Application.xml
+  application.h
+  Lxpanel::Application
+  applicationadaptor
+  ApplicationAdaptor
 )
 
 add_definitions(

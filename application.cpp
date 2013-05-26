@@ -29,16 +29,24 @@
 #include <QDomDocument>
 #include <QFile>
 #include <QIcon>
+#include <QLocale>
+#include <QLibraryInfo>
+#include <QDBusConnection>
+#include "applicationadaptor.h"
 
 #include "panel.h"
 #include "applet.h"
 
 using namespace Lxpanel;
 
+static const char* serviceName = "org.lxde.LxPanel";
+static const char* ifaceName = "org.lxde.LxPanel.Application";
+
 Application::Application(int& argc, char** argv, int flags):
   QApplication(argc, argv),
   desktopSettings_(),
   iconTheme_(),
+  libfmQt_(),
   appletManager_(),
   profile_("default") {
 
@@ -49,12 +57,21 @@ Application::Application(int& argc, char** argv, int flags):
 
 Application::~Application() {
   saveSettings();
-  
+  Q_FOREACH(Panel* panel, panels_) {
+    delete panel;
+  }
+
   // remove UNIX signal handlers
   g_source_remove_by_user_data(this);
 }
 
 bool Application::handleCommandLineArgs() {
+  if(isPrimaryInstance) {
+    
+  }
+  else {
+    exit(0);
+  }
   return true;
 }
 
@@ -70,6 +87,32 @@ void Application::init() {
   // install UNIX signal handlers
   g_unix_signal_add(SIGTERM, GSourceFunc(onUnixSignal), this);
   g_unix_signal_add(SIGINT, GSourceFunc(onUnixSignal), this);
+
+  // install the translations built-into Qt itself
+  qtTranslator.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+  installTranslator(&qtTranslator);
+
+  // install libfm-qt translator
+  installTranslator(libfmQt_.translator());
+
+  // install our own tranlations
+  translator.load("lxpanel-qt_" + QLocale::system().name(), LXPANEL_DATA_DIR "/translations");
+  installTranslator(&translator);
+
+  // initialize dbus
+  QDBusConnection dbus = QDBusConnection::sessionBus();
+  if(dbus.registerService(serviceName)) {
+    // we successfully registered the service
+    isPrimaryInstance = true;
+    new ApplicationAdaptor(this);
+    dbus.registerObject("/Application", this);
+    // connect(this, SIGNAL(aboutToQuit()), SLOT(onAboutToQuit()));
+  }
+  else {
+    // an service of the same name is already registered.
+    // we're not the first instance
+    isPrimaryInstance = false;
+  }
 
   handleCommandLineArgs();
   appletManager_.init();
@@ -217,6 +260,11 @@ bool Application::x11EventFilter(XEvent* event) {
       return true;
   }
   return QApplication::x11EventFilter(event);
+}
+
+
+void Application::run() {
+  qDebug("run");
 }
 
 
