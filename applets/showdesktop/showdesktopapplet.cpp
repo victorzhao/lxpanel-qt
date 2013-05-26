@@ -42,8 +42,7 @@ ShowDesktopApplet::~ShowDesktopApplet() {
 }
 
 void ShowDesktopApplet::onButtonClicked() {
-  XfitMan xfitman;
-  bool show = true; // FIXME: get current status
-  int ret = xfitman.clientMessage(QX11Info::appRootWindow(), xfitman.atom("_NET_SHOWING_DESKTOP"), show ? 1 : 0);
+  bool show = xfitMan().getShowingDesktop(); // get current status
+  XfitMan().setShowingDesktop(!show);
 }
 
