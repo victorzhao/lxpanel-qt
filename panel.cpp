@@ -31,6 +31,7 @@
 #include <QX11Info>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
+#include "xfitman.h"
 
 using namespace Lxpanel;
 
@@ -42,8 +43,6 @@ Panel::Panel():
   QWidget(0) {
 
   setWindowFlags(windowFlags()|Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
-  // FIXME: add proper window flags to make it skip task bar and toplevel?
-
   setAttribute(Qt::WA_X11NetWmWindowTypeDock);
   setAttribute(Qt::WA_AlwaysShowToolTips);
 
@@ -110,6 +109,12 @@ void Panel::get_preferred_width(out int min, out int natural) {
     min = natural = preferred_width;
 }
 */
+
+void Panel::showEvent(QShowEvent* event) {
+  QWidget::showEvent(event);
+  // make the window visible on all desktops
+  xfitMan().moveWindowToDesktop(winId(), -1);
+}
 
 void Panel::resizeEvent(QResizeEvent* event) {
   QWidget::resizeEvent(event);
@@ -537,46 +542,41 @@ void Panel::setIconSize(int size) {
 void Panel::reserveScreenSpace(QRect* rect) {
   // reserve space for the panel
   // See: http://standards.freedesktop.org/wm-spec/1.3/ar01s05.html#NETWMSTRUTPARTIAL
-  Atom _NET_WM_STRUT_PARTIAL = XInternAtom(QX11Info::display(), "_NET_WM_STRUT_PARTIAL", 0);
-  Window window = Window(effectiveWinId());
-
+  int left = 0, right = 0, top = 0, bottom = 0;
+  int left_start_y = 0, left_end_y = 0, right_start_y = 0, right_end_y = 0;
+  int top_start_x = 0, top_end_x = 0, bottom_start_x = 0, bottom_end_x = 0;
   if(rect != NULL) {
-    // _NET_WM_STRUT_PARTIAL data format (CARDINAL[12]/32):
-    // left, right, top, bottom,
-    // left_start_y, left_end_y,
-    // right_start_y, right_end_y,
-    // top_start_x, top_end_x,
-    // bottom_start_x, bottom_end_x
-    unsigned long strut_data[12] = {0};
-    int index;
     switch(position_) {
       case PositionTop:
+        top = rect->height();
+        top_start_x = rect->x();
+        top_end_x = rect->x() + rect->width() - 1;
+        break;
       case PositionBottom:
-        index = position_ == PositionTop ? 2 : 3;
-        // g_print("pos: %d, %d,%d,%d,%d\n", (int)position_, rect->x(), rect->y(), rect->width(), rect->height());
-        strut_data[index] = rect->height();
-        strut_data[4 + index * 2] = rect->x();
-        strut_data[4 + index * 2 + 1] = rect->x() + rect->width() - 1;
-        // -1 is needed here. otherwise, some window managers will
-        // also reserve the space for the adjacent monitor.
-        // openbox is one of these window managers
+        bottom = rect->height();
+        bottom_start_x = rect->x();
+        bottom_end_x = rect->x() + rect->width() - 1;
         break;
       case PositionLeft:
+        left = rect->width();
+        left_start_y = rect->y();
+        left_end_y = rect->y() + rect->height() - 1;
+        break;
       case PositionRight:
-        index = position_ == PositionLeft ? 0 : 1;
-        strut_data[index] = rect->width();
-        strut_data[4 + index * 2] = rect->y();
-        strut_data[4 + index * 2 + 1] = rect->y() + rect->height() - 1;
-        // -1 is needed here. otherwise, some window managers will
-        // also reserve the space for the adjacent monitor.
+        right = rect->width();
+        right_start_y = rect->y();
+        right_end_y = rect->y() + rect->height() - 1;
         break;
     }
-
-    XChangeProperty(QX11Info::display(), window, _NET_WM_STRUT_PARTIAL,
-                    XA_CARDINAL, 32, PropModeReplace,
-                    (unsigned char*)strut_data, 12);
+    xfitMan().setStrut(winId(),
+                       left, right, top, bottom,
+                       left_start_y, left_end_y,
+                       right_start_y, right_end_y,
+                       top_start_x, top_end_x,
+                       bottom_start_x, bottom_end_x);
   }
   else { // remove it
-    XDeleteProperty(QX11Info::display(), window, _NET_WM_STRUT_PARTIAL);
+    XDeleteProperty(QX11Info::display(), winId(), xfitMan().atom("_NET_WM_STRUT"));
+    XDeleteProperty(QX11Info::display(), winId(), xfitMan().atom("_NET_WM_STRUT_PARTIAL"));
   }
 }
