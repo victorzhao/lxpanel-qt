@@ -85,6 +85,8 @@ set(lxpanel_qt_SRCS
   applets/systray/systrayapplet.cpp
   applets/systray/trayicon.cpp
   applets/systray/razortray.cpp
+  applets/battery/batteryapplet.cpp
+  applets/battery/batterywidget.cpp
 )
 
 qt4_add_dbus_adaptor(lxpanel_qt_SRCS

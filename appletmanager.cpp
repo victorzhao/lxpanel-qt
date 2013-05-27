@@ -31,6 +31,7 @@
 #include "applets/pager/pagerapplet.h"
 #include "applets/task/taskapplet.h"
 #include "applets/systray/systrayapplet.h"
+#include "applets/battery/batteryapplet.h"
 
 using namespace Lxpanel;
 
@@ -42,6 +43,7 @@ LXPANEL_DECLARE_BUILTIN_APPLET(BlankApplet)
 LXPANEL_DECLARE_BUILTIN_APPLET(PagerApplet)
 LXPANEL_DECLARE_BUILTIN_APPLET(TaskApplet)
 LXPANEL_DECLARE_BUILTIN_APPLET(SysTrayApplet)
+LXPANEL_DECLARE_BUILTIN_APPLET(BatteryApplet)
 
 AppletManager::AppletManager() {
 
@@ -61,6 +63,7 @@ void AppletManager::init() {
   knownApplets_.insert("pager", new PagerAppletFactory());
   knownApplets_.insert("task", new TaskAppletFactory());
   knownApplets_.insert("systray", new SysTrayAppletFactory());
+  knownApplets_.insert("battery", new BatteryAppletFactory());
 
   // find dynamic applets modules from module dirs
   QDir dir;
