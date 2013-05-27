@@ -59,17 +59,13 @@ private:
 AppMenuApplet::AppMenuApplet(QWidget* parent):
   Applet(parent),
   button_(new QPushButton()),
-  menu_(new QMenu()) {
+  menu_(NULL) {
 
   button_->setText("Start");
   button_->setIcon(QIcon::fromTheme("start-here"));
   button_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-  connect(menu_, SIGNAL(hovered(QAction*)), SLOT(onItemHovered(QAction*)));
-  button_->setMenu(menu_);
-
   menu_cache = menu_cache_lookup("applications.menu");
-
   if(menu_cache) {
     menu_cache_reload_notify = menu_cache_add_reload_notify(menu_cache, (MenuCacheReloadNotify)reloadNotify, this);
   }
@@ -77,7 +73,8 @@ AppMenuApplet::AppMenuApplet(QWidget* parent):
 
 AppMenuApplet::~AppMenuApplet() {
   delete button_;
-  delete menu_;
+  if(menu_)
+    delete menu_;
 
   if(menu_cache) {
     menu_cache_remove_reload_notify(menu_cache, menu_cache_reload_notify);
@@ -113,10 +110,17 @@ void AppMenuApplet::addMenuItems(QMenu* menu, MenuCacheDir* dir) {
 void AppMenuApplet::reloadMenu() {
   if(menu_) {
     // TODO: remove old menu items
+    delete menu_;
   }
+  menu_ = new QMenu();
+  connect(menu_, SIGNAL(hovered(QAction*)), SLOT(onItemHovered(QAction*)));
+  button_->setMenu(menu_);
+
   // reload menu items
   MenuCacheDir* dir = menu_cache_get_root_dir(menu_cache);
   addMenuItems(menu_, dir);
+  
+  // FIXME: add "Run" and "Shutdown" menu items.
 }
 
 void AppMenuApplet::onItemTrigerred() {
