@@ -22,20 +22,51 @@
 #define LXPANEL_BATTERYAPPLET_H
 
 #include "../../applet.h"
+#include <QDBusInterface>
+#include <QWidget>
+#include <QProgressBar>
+#include <QVector>
+
+class QLabel;
+class QHBoxLayout;
 
 namespace Lxpanel {
 
-class BatteryWidget;
-  
-class BatteryApplet : public Lxpanel::Applet {
+class BatteryIndicatorBar: public QProgressBar {
+  Q_OBJECT
+public:
+  BatteryIndicatorBar(QDBusInterface *deviceIface);
+  virtual ~BatteryIndicatorBar();
+
+  QDBusInterface* deviceIface() {
+    return deviceIface_;
+  }
+
+private Q_SLOTS:
+  void update();
+
+private:
+  QDBusInterface *deviceIface_;
+};
+
+
+class BatteryApplet: public Lxpanel::Applet {
   Q_OBJECT
 public:
   BatteryApplet(QWidget* parent = 0);
   ~BatteryApplet();
   virtual QWidget* widget();
 
+private Q_SLOTS:
+  void onDeviceAdded(QString objPath);
+  void onDeviceRemoved(QString objPath);
+
 private:
-  BatteryWidget* widget_;
+  QWidget* widget_;
+  QLabel* iconLabel_;
+  QHBoxLayout* layout_;
+  QDBusInterface upowerIface_;
+  QVector<BatteryIndicatorBar*> batteryBars_;
 };
 
 }
