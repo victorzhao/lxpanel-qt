@@ -77,7 +77,7 @@ bool VolumeControlAlsa::hasMute() {
 }
 
 void VolumeControlAlsa::setLevel(int level) {
-  qDebug("setLevel(%d)", level);
+  // qDebug("setLevel(%d)", level);
   if(masterElement_ != NULL) {
     snd_mixer_selem_set_playback_volume_all(masterElement_, level);
     // snd_mixer_selem_set_playback_volume(masterElement_, SND_MIXER_SCHN_FRONT_LEFT, level);
