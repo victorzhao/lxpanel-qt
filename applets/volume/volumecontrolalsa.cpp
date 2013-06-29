@@ -47,8 +47,8 @@ VolumeControlAlsa::VolumeControlAlsa(QObject* parent):
 
 VolumeControlAlsa::~VolumeControlAlsa() {
   if(mixer_) {
-    snd_mixer_close(mixer_);
-    snd_mixer_free(mixer_);
+    snd_mixer_free(mixer_); // Unload all mixer elements and free all related resources.
+    snd_mixer_close(mixer_); // Close a mixer and free all related resources.
   }
   if(alsaSource_) {
     g_source_destroy(alsaSource_);
