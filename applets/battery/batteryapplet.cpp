@@ -31,6 +31,8 @@
 
 using namespace Lxpanel;
 
+Q_EXPORT_PLUGIN2(battery, Lxpanel::BatteryAppletPlugin);
+
 BatteryIndicatorBar::BatteryIndicatorBar(QDBusInterface* deviceIface):
   QProgressBar(),
   deviceIface_(deviceIface) {
@@ -131,4 +133,17 @@ void BatteryApplet::onDeviceRemoved(QString objPath) {
       break;
     }
   }
+}
+
+
+BatteryAppletPlugin::BatteryAppletPlugin(): QObject() {
+
+}
+
+BatteryAppletPlugin::~BatteryAppletPlugin() {
+
+}
+
+Applet* BatteryAppletPlugin::create(QWidget* parent) {
+  return new BatteryApplet(parent);
 }

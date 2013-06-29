@@ -2,6 +2,8 @@ project(lxpanel-qt)
 
 cmake_minimum_required(VERSION 2.8.6)
 
+include(GNUInstallDirs) # requires cmake 2.8.5
+
 # Qt
 find_package(Qt4 REQUIRED QtCore QtGui QtXml)
 
@@ -19,6 +21,7 @@ pkg_check_modules(X11 REQUIRED
   x11
   xdamage
   xcomposite
+  xrender
 )
 
 pkg_check_modules(GTOP REQUIRED
@@ -47,7 +50,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-set(CMAKE_AUTOMOC TRUE)
+set(CMAKE_AUTOMOC TRUE) # requires cmake 2.8.6
 
 set(desktop_settings_SRCS
   desktopsettings.cpp
@@ -70,6 +73,7 @@ set(lxpanel_qt_SRCS
   # xfitman taken from razor-qt
   xfitman.cpp
   # built-in applets
+  applets/appmenu/appmenuapplet.cpp
   applets/clock/clockapplet.cpp
   applets/showdesktop/showdesktopapplet.cpp
   applets/launcher/launcherapplet.cpp
@@ -85,7 +89,6 @@ set(lxpanel_qt_SRCS
   applets/systray/systrayapplet.cpp
   applets/systray/trayicon.cpp
   applets/systray/razortray.cpp
-  applets/battery/batteryapplet.cpp
 )
 
 qt4_add_dbus_adaptor(lxpanel_qt_SRCS
@@ -105,8 +108,8 @@ qt4_wrap_ui(lximage_qt_UI_H
 )
 
 add_definitions(
-  -DLXPANEL_LIB_DIR="${CMAKE_INSTALL_PREFIX}/lib/lxpanel-qt"
-  -DLXPANEL_DATA_DIR="${CMAKE_INSTALL_PREFIX}/share/lxpanel-qt"
+  -DLXPANEL_LIB_DIR="${CMAKE_INSTALL_FULL_LIBDIR}/lxpanel-qt"
+  -DLXPANEL_DATA_DIR="${CMAKE_INSTALL_FULL_DATADIR} /lxpanel-qt"
   -DLIBFM_QT_API=Q_DECL_IMPORT # fix the problem of libfm-qt
 )
 
@@ -133,25 +136,34 @@ install(TARGETS lxpanel-qt
 
 # dynamically loadable applet plugins
 
-set(appmenu_SRCS
-  applets/appmenu/appmenuapplet.cpp
+set(battery_SRCS
+  applets/battery/batteryapplet.cpp
 )
 
-add_library(appmenu MODULE
-  ${appmenu_SRCS}
+add_library(battery MODULE
+  ${battery_SRCS}
 )
 
-target_link_libraries(appmenu
+target_link_libraries(battery
   ${QT_QTCORE_LIBRARY}
   ${QT_QTGUI_LIBRARY}
+  ${QT_QTDBUS_LIBRARY}
   ${QT_QTXML_LIBRARY}
-  ${GLIB_LIBRARIES}
 )
 
-set_target_properties(appmenu PROPERTIES PREFIX "")
+set_target_properties(battery PROPERTIES PREFIX "")
 
-install(TARGETS appmenu
-  LIBRARY DESTINATION lib/lxpanel-qt/applets
+install(TARGETS battery
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/lxpanel-qt/applets
+)
+
+# install library headers
+# TODO:
+
+# default config file
+
+install(DIRECTORY data/default
+  DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/xdg/lxpanel-qt
 )
 
 

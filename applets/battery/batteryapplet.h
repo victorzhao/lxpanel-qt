@@ -22,6 +22,7 @@
 #define LXPANEL_BATTERYAPPLET_H
 
 #include "../../applet.h"
+#include "../../appletplugin.h"
 #include <QDBusInterface>
 #include <QWidget>
 #include <QProgressBar>
@@ -67,6 +68,17 @@ private:
   QHBoxLayout* layout_;
   QDBusInterface upowerIface_;
   QVector<BatteryIndicatorBar*> batteryBars_;
+};
+
+
+class BatteryAppletPlugin: public QObject, public AppletPlugin {
+  Q_OBJECT
+  Q_INTERFACES(Lxpanel::AppletPlugin)
+
+public:
+  BatteryAppletPlugin();
+  virtual ~BatteryAppletPlugin();
+  virtual Applet* create(QWidget* parent);
 };
 
 }

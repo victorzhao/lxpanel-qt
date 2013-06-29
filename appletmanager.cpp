@@ -23,6 +23,7 @@
 
 // built-in applets
 #include "appletpluginfactory.h"
+#include "applets/appmenu/appmenuapplet.h"
 #include "applets/clock/clockapplet.h"
 #include "applets/showdesktop/showdesktopapplet.h"
 #include "applets/launcher/launcherapplet.h"
@@ -31,10 +32,10 @@
 #include "applets/pager/pagerapplet.h"
 #include "applets/task/taskapplet.h"
 #include "applets/systray/systrayapplet.h"
-#include "applets/battery/batteryapplet.h"
 
 using namespace Lxpanel;
 
+LXPANEL_DECLARE_BUILTIN_APPLET(AppMenuApplet)
 LXPANEL_DECLARE_BUILTIN_APPLET(ClockApplet)
 LXPANEL_DECLARE_BUILTIN_APPLET(LauncherApplet)
 LXPANEL_DECLARE_BUILTIN_APPLET(ShowDesktopApplet)
@@ -43,7 +44,6 @@ LXPANEL_DECLARE_BUILTIN_APPLET(BlankApplet)
 LXPANEL_DECLARE_BUILTIN_APPLET(PagerApplet)
 LXPANEL_DECLARE_BUILTIN_APPLET(TaskApplet)
 LXPANEL_DECLARE_BUILTIN_APPLET(SysTrayApplet)
-LXPANEL_DECLARE_BUILTIN_APPLET(BatteryApplet)
 
 AppletManager::AppletManager() {
 
@@ -55,6 +55,7 @@ AppletManager::~AppletManager() {
 
 void AppletManager::init() {
   // register built-in applets
+  knownApplets_.insert("appmenu", new AppMenuAppletFactory());
   knownApplets_.insert("clock", new ClockAppletFactory());
   knownApplets_.insert("showdesktop", new ShowDesktopAppletFactory());
   knownApplets_.insert("launcher", new LauncherAppletFactory());
@@ -63,7 +64,6 @@ void AppletManager::init() {
   knownApplets_.insert("pager", new PagerAppletFactory());
   knownApplets_.insert("task", new TaskAppletFactory());
   knownApplets_.insert("systray", new SysTrayAppletFactory());
-  knownApplets_.insert("battery", new BatteryAppletFactory());
 
   // find dynamic applets modules from module dirs
   QDir dir;

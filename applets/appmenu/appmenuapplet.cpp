@@ -28,8 +28,6 @@
 
 using namespace Lxpanel;
 
-Q_EXPORT_PLUGIN2(appmenu, Lxpanel::AppMenuAppletPlugin);
-
 class AppMenuAction: public QAction {
 public:
   explicit AppMenuAction(MenuCacheItem* item, QObject* parent = 0):
@@ -143,15 +141,3 @@ void AppMenuApplet::onItemHovered(QAction* action) {
   }
 }
 
-
-AppMenuAppletPlugin::AppMenuAppletPlugin(): QObject() {
-
-}
-
-AppMenuAppletPlugin::~AppMenuAppletPlugin() {
-
-}
-
-Applet* AppMenuAppletPlugin::create(QWidget* parent) {
-  return new AppMenuApplet(parent);
-}

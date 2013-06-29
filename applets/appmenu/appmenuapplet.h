@@ -62,17 +62,6 @@ private:
   MenuCacheNotifyId menu_cache_reload_notify;
 };
 
-
-class AppMenuAppletPlugin: public QObject, public AppletPlugin {
-  Q_OBJECT
-  Q_INTERFACES(Lxpanel::AppletPlugin)
-
-public:
-  AppMenuAppletPlugin();
-  virtual ~AppMenuAppletPlugin();
-  virtual Applet* create(QWidget* parent);
-};
-
 }
 
 #endif // LXPANEL_APPMENUAPPLET_H
