@@ -37,6 +37,9 @@ pkg_check_modules(LIBFM_QT REQUIRED
   libfm-qt
 )
 
+# FIXME: make this optional?
+find_package(ALSA) # for volume control
+
 set(CMAKE_CXX_FLAGS "-DQT_NO_KEYWORDS -fno-exceptions")
 
 include_directories(
@@ -46,6 +49,7 @@ include_directories(
   ${GTOP_INCLUDE_DIRS}
   ${MENU_CACHE_INCLUDE_DIRS}
   ${LIBFM_QT_INCLUDE_DIRS}
+  ${ALSA_INCLUDE_DIRS} # for volume control
   ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}
 )
@@ -68,6 +72,7 @@ set(lxpanel_qt_SRCS
   appletplugin.cpp
   appletfactory.cpp
   appletpluginfactory.cpp
+  popup.cpp
   # run dialog
   rundialog.cpp
   # xfitman taken from razor-qt
@@ -89,6 +94,9 @@ set(lxpanel_qt_SRCS
   applets/systray/systrayapplet.cpp
   applets/systray/trayicon.cpp
   applets/systray/razortray.cpp
+  applets/volume/volumeapplet.cpp
+  applets/volume/volumecontrol.cpp
+  applets/volume/volumecontrolalsa.cpp
 )
 
 qt4_add_dbus_adaptor(lxpanel_qt_SRCS
@@ -127,6 +135,7 @@ target_link_libraries(lxpanel-qt
   ${GTOP_LIBRARIES}
   ${MENU_CACHE_LIBRARIES}
   ${LIBFM_QT_LIBRARIES}
+  ${ALSA_LIBRARIES}
 )
 
 install(TARGETS lxpanel-qt
@@ -162,7 +171,9 @@ install(TARGETS battery
 
 # default config file
 
-install(DIRECTORY data/default
+install(DIRECTORY
+  data/default
+  data/2panel
   DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/xdg/lxpanel-qt
 )
 

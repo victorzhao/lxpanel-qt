@@ -4,8 +4,8 @@
 		<file_manager>pcmanfm</file_manager>
 		<logout_command>lxde-logout</logout_command>
 	</global>
-	<panel id="bottom_panel">
-		<position>bottom</position>
+	<panel id="top_panel">
+		<position>top</position>
 		<left_margin>0</left_margin>
 		<top_margin>0</top_margin>
 		<right_margin>0</right_margin>
@@ -26,10 +26,6 @@
 				<show_label>false</show_label>
 			</applet>
 
-			<applet type="pager">
-				<rows>2</rows>
-			</applet>
-
 			<applet type="places" />
 
 			<applet type="launcher">
@@ -47,14 +43,11 @@
 				</button>
 			</applet>
 
-			<applet type="task">
-				<all_workspace>false</all_workspace>
-				<grouping>auto</grouping>
+			<applet type="blank">
+				<expand>true</expand>
 			</applet>
 
 			<applet type="mounts" />
-
-			<applet type="volume" />
 
 			<applet type="netstatus">
 				<iface>eth0</iface>
@@ -63,19 +56,45 @@
 
 			<applet type="battery" />
 
-			<applet type="logout">
-				<show_menu>false</show_menu>
-			</applet>
-
-			<applet type="systray" />
-
 			<applet type="clock">
 				<format></format>
 				<tip_format>%c</tip_format>
 			</applet>
 
+			<applet type="logout">
+				<show_menu>false</show_menu>
+			</applet>
+
+			<applet type="systray" />
+		</applets>
+	</panel>
+	<panel id="bottom_panel">
+		<position>bottom</position>
+		<left_margin>0</left_margin>
+		<top_margin>0</top_margin>
+		<right_margin>0</right_margin>
+		<bottom_margin>0</bottom_margin>
+		<icon_size>24</icon_size>
+		<thickness>26</thickness>
+		<length>100</length>
+		<length_mode>percent</length_mode>
+		<alignment>0.5</alignment>
+		<reserve_space>true</reserve_space>
+		<auto_hide>false</auto_hide>
+		<span_monitors>false</span_monitors>
+		<monitor>0</monitor>
+		<xscreen>0</xscreen>
+		<applets>
 			<applet type="showdesktop" />
 
+			<applet type="pager">
+				<rows>2</rows>
+			</applet>
+
+			<applet type="task">
+				<all_workspace>false</all_workspace>
+				<grouping>auto</grouping>
+			</applet>
 		</applets>
 	</panel>
 </lxpanel>
