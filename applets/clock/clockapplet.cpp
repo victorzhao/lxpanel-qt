@@ -22,11 +22,38 @@
 #include <QTimer>
 #include <QDateTime>
 #include <QVBoxLayout>
+#include <QCalendarWidget>
+#include <QMouseEvent>
+#include "../../popup.h"
 
 using namespace Lxpanel;
 
+ClockLabel::ClockLabel(QWidget* parent, Qt::WindowFlags f):
+  QLabel(parent, f) {
+}
+
+ClockLabel::~ClockLabel() {
+}
+
+void ClockLabel::mousePressEvent(QMouseEvent* event) {
+  QLabel::mousePressEvent(event);
+  if(event->button() == Qt::LeftButton) {
+    Popup* popup = new Popup();
+    QCalendarWidget* calendar = new QCalendarWidget(popup);
+    QVBoxLayout* layout = new QVBoxLayout(popup);
+    popup->setLayout(layout);
+    layout->setMargin(0);
+    layout->addWidget(calendar);
+    connect(popup, SIGNAL(aboutToHide()), popup, SLOT(deleteLater()));
+
+    QPoint _pos = parentWidget()->mapToGlobal(pos());
+    popup->popup(_pos);
+  }
+}
+
+
 ClockApplet::ClockApplet(QWidget* parent): Applet(parent) {
-  label_ = new QLabel(parent);
+  label_ = new ClockLabel(parent);
   label_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   timer_ = new QTimer();
   connect(timer_, SIGNAL(timeout()), SLOT(onTimeout()));

@@ -25,11 +25,25 @@
 
 #include <QLabel>
 
-class QLabel;
 class QTimer;
+class QCalendarWidget;
 
 namespace Lxpanel {
+  
+class Popup;
 
+class ClockLabel: public QLabel {
+  Q_OBJECT
+public:
+  ClockLabel(QWidget * parent = 0, Qt::WindowFlags f = 0);
+  virtual ~ClockLabel();
+
+protected:
+  void mousePressEvent(QMouseEvent * event);
+
+private:
+};
+  
 class ClockApplet : public Applet {
   Q_OBJECT
 
