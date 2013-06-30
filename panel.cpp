@@ -420,7 +420,12 @@ void Panel::recalculateGeometry() {
     else
       newX = monitor_rect.x();
   }
-  setGeometry(newX, newY, newWidth, newHeight);
+  // NOTE: setGeometry() excludes window frame and will place the panel
+  // at the wrong position. Use move() here.
+  // FIXME: we should make the panel totaqlly frameless so the geometry calculation
+  // is not affected by window managers.
+  move(newX, newY);
+  resize(newWidth, newHeight);
 
   // qDebug("%s: %d, %d, %d, %d, %d, %d\n", qPrintable(objectName()),
   //        newX, newY, newWidth, newHeight, length_, lengthMode_);
