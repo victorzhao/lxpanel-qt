@@ -29,6 +29,7 @@ SysTrayApplet::SysTrayApplet(QWidget* parent):
 
   Application* app = static_cast<Application*>(qApp);
   app->addXEventFilter(this);
+  tray_->setContentsMargins(0, 0, 0, 0);
 }
 
 SysTrayApplet::~SysTrayApplet() {

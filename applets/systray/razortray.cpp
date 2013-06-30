@@ -78,6 +78,7 @@ RazorTray::RazorTray(QWidget* parent):
 
   // mLayout = new RazorGridLayout(this);
   mLayout = new QBoxLayout(QBoxLayout::LeftToRight, this);
+  mLayout->setMargin(0); // make the margin 0 to make more room for tray icons
   setLayout(mLayout);
   realign();
 

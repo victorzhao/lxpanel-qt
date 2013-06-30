@@ -54,6 +54,7 @@ Panel::Panel():
   layout_->setMargin(0);
   layout_->setContentsMargins(0, 0, 0, 0);
   // layout_->setSizeConstraint(QLayout::SetNoConstraint);
+  layout_->setSizeConstraint(QLayout::SetMaximumSize);
   setLayout(layout_);
 }
   
@@ -138,8 +139,9 @@ void Panel::moveEvent(QMoveEvent* event) {
 }
 
 void Panel::onGeometryChanged() {
-  qDebug("onGeometryChanged: %s", qPrintable(objectName()));
-  QRect newGeometry = geometry();
+  // qDebug("onGeometryChanged: %s", qPrintable(objectName()));
+  QRect newGeometry = frameGeometry();
+  // qDebug("newGeometry: %d, %d, %d, %d", newGeometry.x(), newGeometry.y(), newGeometry.width(), newGeometry.height());
   if(newGeometry != oldGeometry_) {
     oldGeometry_ = newGeometry;
     if(reserveSpace_) {
@@ -397,7 +399,7 @@ void Panel::recalculateGeometry() {
     if(lengthMode_ == SizeModePercent)
       newWidth = monitor_rect.width() * length_ / 100;
     else if(lengthMode_ == SizeModePixel)
-      newWidth = length_;
+      newWidth = length_; // FIXME: set max width of the panel to the value?
     else
       newWidth = width();
     newX = monitor_rect.x() + (int)((monitor_rect.width() - newWidth) * alignment_);
@@ -405,6 +407,8 @@ void Panel::recalculateGeometry() {
       newY = (monitor_rect.y() + monitor_rect.height()) - newHeight;
     else
       newY = monitor_rect.y();
+    setMaximumHeight(newHeight);
+    setMaximumWidth(QWIDGETSIZE_MAX);
   }
   else { // orientation == Qt::Vertical
     newWidth = thickness_;
@@ -419,16 +423,18 @@ void Panel::recalculateGeometry() {
       newX = (monitor_rect.x() + monitor_rect.width()) - newWidth;
     else
       newX = monitor_rect.x();
+    setMaximumWidth(newHeight);
+    setMaximumHeight(QWIDGETSIZE_MAX);
   }
   // NOTE: setGeometry() excludes window frame and will place the panel
   // at the wrong position. Use move() here.
   // FIXME: we should make the panel totaqlly frameless so the geometry calculation
   // is not affected by window managers.
-  move(newX, newY);
   resize(newWidth, newHeight);
+  move(newX, newY);
 
-  // qDebug("%s: %d, %d, %d, %d, %d, %d\n", qPrintable(objectName()),
-  //        newX, newY, newWidth, newHeight, length_, lengthMode_);
+  qDebug("%s: %d, %d, %d, %d, %d, %d\n", qPrintable(objectName()),
+         newX, newY, newWidth, newHeight, length_, lengthMode_);
 }
 
 void Panel::setOrientation(Qt::Orientation orientation) {
@@ -526,7 +532,7 @@ void Panel::setReserveSpace(bool reserve_space) {
   if(reserveSpace_ != reserve_space) {
     reserveSpace_ = reserve_space;
     if(reserve_space) {
-      QRect rect = geometry();
+      QRect rect = frameGeometry();
       reserveScreenSpace(&rect);
     }
     else {
