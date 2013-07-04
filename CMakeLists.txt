@@ -73,6 +73,8 @@ set(lxpanel_qt_SRCS
   appletfactory.cpp
   appletpluginfactory.cpp
   popup.cpp
+  # preferences
+  preferencesdialog.cpp
   # run dialog
   rundialog.cpp
   # xfitman taken from razor-qt
@@ -109,6 +111,7 @@ qt4_add_dbus_adaptor(lxpanel_qt_SRCS
 
 set(lxpanel_qt_UIS
   rundialog.ui
+  preferences.ui
 )
 
 qt4_wrap_ui(lximage_qt_UI_H

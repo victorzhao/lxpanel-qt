@@ -27,6 +27,8 @@
 #include <QDesktopWidget>
 #include <QTimer>
 #include <QSpacerItem>
+#include <QMenu>
+#include "preferencesdialog.h"
 
 #include <QX11Info>
 #include <X11/Xlib.h>
@@ -137,6 +139,15 @@ void Panel::moveEvent(QMoveEvent* event) {
     pendingGeometryChanged_ = true;
   }
 }
+
+void Panel::contextMenuEvent(QContextMenuEvent* event) {
+  QWidget::contextMenuEvent(event);
+
+  // QMenu* popup = new QMenu();
+  PreferencesDialog dlg(this);
+  dlg.exec();
+}
+
 
 void Panel::onGeometryChanged() {
   // qDebug("onGeometryChanged: %s", qPrintable(objectName()));

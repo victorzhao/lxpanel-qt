@@ -171,6 +171,7 @@ protected:
   virtual void resizeEvent(QResizeEvent* event);
   virtual void moveEvent(QMoveEvent* event);
   virtual void showEvent(QShowEvent* event);
+  virtual void contextMenuEvent(QContextMenuEvent * event);
 
 Q_SIGNALS:
   // an applet is added to the panel
