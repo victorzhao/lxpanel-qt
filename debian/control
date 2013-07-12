@@ -1,0 +1,34 @@
+Source: lxpanel-qt
+Section: x11
+Priority: optional
+Maintainer: Julien Lavergne <gilir@ubuntu.com>
+Build-Depends: debhelper (>= 9~)
+ , cmake
+ , libqt4-dev
+ , libglib2.0-dev
+ , libx11-dev
+ , libxdamage-dev
+ , libxcomposite-dev
+ , libxrender-dev
+ , libgtop2-dev
+ , libmenu-cache-dev
+ , libfm-dev
+ , libfm-qt-dev
+ , libasound2-dev
+Standards-Version: 3.9.3
+
+Package: lxpanel-qt
+Architecture: any
+Depends: ${shlibs:Depends}, 
+         ${misc:Depends},
+Description: Panel in Qt for LXDE
+ lxpanel-qt is a panel in Qt for LXDE.
+
+Package: lxpanel-qt-dbg
+Architecture: any
+Section: debug
+Depends: lxpanel-qt (= ${binary:Version}),
+         ${shlibs:Depends},
+         ${misc:Depends}
+Description: Debug package for lxpanel-qt
+ This package containes debug symbols.
