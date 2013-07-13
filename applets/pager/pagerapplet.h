@@ -33,7 +33,7 @@ namespace Lxpanel {
 class PagerApplet : public Applet, XEventFilter {
   Q_OBJECT
 public:
-  PagerApplet(QWidget* parent = 0);
+  PagerApplet(AppletFactory* factory, QWidget* parent = 0);
 
   virtual QWidget* widget() {
     return frame_;

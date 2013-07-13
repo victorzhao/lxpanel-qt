@@ -54,7 +54,7 @@ private:
 class BatteryApplet: public Lxpanel::Applet {
   Q_OBJECT
 public:
-  BatteryApplet(QWidget* parent = 0);
+  BatteryApplet(AppletFactory* factory, QWidget* parent = 0);
   ~BatteryApplet();
   virtual QWidget* widget();
 
@@ -78,7 +78,7 @@ class BatteryAppletPlugin: public QObject, public AppletPlugin {
 public:
   BatteryAppletPlugin();
   virtual ~BatteryAppletPlugin();
-  virtual Applet* create(QWidget* parent);
+  virtual Applet* create(Lxpanel::AppletFactory* factory, QWidget* parent);
 };
 
 }

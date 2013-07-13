@@ -36,7 +36,7 @@ class AppMenuApplet: public Applet {
   Q_OBJECT
 
 public:
-  explicit AppMenuApplet(QWidget* parent = 0);
+  explicit AppMenuApplet(AppletFactory* factory, QWidget* parent = 0);
   virtual ~AppMenuApplet();
 
   QWidget* widget() {

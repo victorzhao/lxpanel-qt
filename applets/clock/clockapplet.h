@@ -48,7 +48,7 @@ class ClockApplet : public Applet {
   Q_OBJECT
 
 public:
-  explicit ClockApplet(QWidget* parent = 0);
+  explicit ClockApplet(AppletFactory* factory, QWidget* parent = 0);
   virtual ~ClockApplet();
 
   QWidget* widget() {

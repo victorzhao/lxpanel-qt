@@ -31,7 +31,7 @@ namespace Lxpanel {
 class SysTrayApplet: public Lxpanel::Applet, public XEventFilter {
   Q_OBJECT
 public:
-  explicit SysTrayApplet(QWidget* parent = 0);
+  explicit SysTrayApplet(AppletFactory* factory, QWidget* parent = 0);
   virtual QWidget* widget();
   virtual ~SysTrayApplet();
 

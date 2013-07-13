@@ -31,7 +31,7 @@ class ShowDesktopApplet : public Applet {
   Q_OBJECT
 
 public:
-  explicit ShowDesktopApplet(QWidget* parent = 0);
+  explicit ShowDesktopApplet(AppletFactory* factory, QWidget* parent = 0);
   virtual ~ShowDesktopApplet();
   
   QWidget* widget() {

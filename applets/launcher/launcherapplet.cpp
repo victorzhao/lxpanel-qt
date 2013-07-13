@@ -24,7 +24,9 @@
 
 using namespace Lxpanel;
 
-LauncherApplet::LauncherApplet(QWidget* parent): Applet() {
+LauncherApplet::LauncherApplet(AppletFactory* factory, QWidget* parent):
+  Applet(factory, parent) {
+
   frame_ = new QFrame(parent);
   layout_ = new QBoxLayout(QBoxLayout::LeftToRight, frame_);
   frame_->setLayout(layout_);

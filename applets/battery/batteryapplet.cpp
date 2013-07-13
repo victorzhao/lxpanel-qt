@@ -61,8 +61,8 @@ void BatteryIndicatorBar::update() {
 
 
 
-BatteryApplet::BatteryApplet(QWidget* parent):
-  Applet(parent),
+BatteryApplet::BatteryApplet(AppletFactory* factory, QWidget* parent):
+  Applet(factory, parent),
   upowerIface_("org.freedesktop.UPower",
                "/org/freedesktop/UPower",
                "org.freedesktop.UPower",
@@ -144,6 +144,6 @@ BatteryAppletPlugin::~BatteryAppletPlugin() {
 
 }
 
-Applet* BatteryAppletPlugin::create(QWidget* parent) {
-  return new BatteryApplet(parent);
+Applet* BatteryAppletPlugin::create(AppletFactory* factory, QWidget* parent) {
+  return new BatteryApplet(factory, parent);
 }

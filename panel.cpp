@@ -325,14 +325,16 @@ bool Panel::save(QDomElement& element) {
 void Panel::insertApplet(Applet* applet, int index) {
   QWidget* appletWidget = applet->widget();
   if(appletWidget) {
-    applets_.insert(index, applet);
+    if(index < 0)
+      applets_.push_back(applet);
+    else
+      applets_.insert(index, applet);
     // int stretch = 0;//applet->expand() ? 1 : 0;
     int stretch = applet->expand() ? 1 : 0;
     layout_->insertWidget(index, appletWidget, stretch, 0);
     layout_->setAlignment(appletWidget, Qt::AlignVCenter);
     appletWidget->show();
     QRect rc = appletWidget->geometry();
-    qDebug("%d,%d,%d,%d", rc.x(), rc.y(), rc.width(), rc.height());
   }
   else {
     // FIXME: handle errors?

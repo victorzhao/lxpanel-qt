@@ -52,7 +52,9 @@ void ClockLabel::mousePressEvent(QMouseEvent* event) {
 }
 
 
-ClockApplet::ClockApplet(QWidget* parent): Applet(parent) {
+ClockApplet::ClockApplet(AppletFactory* factory, QWidget* parent):
+  Applet(factory, parent) {
+
   label_ = new ClockLabel(parent);
   label_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   timer_ = new QTimer();

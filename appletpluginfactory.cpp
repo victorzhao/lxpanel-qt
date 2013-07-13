@@ -20,13 +20,15 @@
 
 #include "appletpluginfactory.h"
 #include <QPluginLoader>
+#include <glib.h>
 
 using namespace Lxpanel;
 
-AppletPluginFactory::AppletPluginFactory(QString filename):
+AppletPluginFactory::AppletPluginFactory(QString id, QString moduleFile, QString desktopFile):
+  AppletFactory(id),
   plugin_(NULL),
-  moduleFile_(filename) {
-  
+  moduleFile_(moduleFile) {
+  loadInfo(desktopFile);
 }
 
 AppletPluginFactory::~AppletPluginFactory() {
@@ -42,6 +44,36 @@ Applet* AppletPluginFactory::create(QWidget* parent) {
     // qDebug("module: %s, plugin(%p): %p\n%s", qPrintable(moduleFile_), obj, plugin_, qPrintable(loader.errorString()));
   }
   if(plugin_)
-    applet = plugin_->create(parent);
+    applet = plugin_->create(this, parent);
   return applet;
+}
+
+bool AppletPluginFactory::loadInfo(QString desktopFile) {
+  // glib GKeyFile supports localized key values while QSettings does not.
+  GKeyFile* kf = g_key_file_new();
+  if(g_key_file_load_from_file(kf, desktopFile.toLocal8Bit().constData(), GKeyFileFlags(0), NULL)) {
+    char* type = g_key_file_get_string(kf, "Desktop Entry", "Type", NULL);
+    if(type) {
+      if(strcmp(type, "Applet") == 0) {
+        char* str = g_key_file_get_locale_string(kf, "Desktop Entry", "Name", NULL, NULL);
+        if(str) {
+          setName(QString::fromUtf8(str));
+          g_free(str);
+        }
+        str = g_key_file_get_locale_string(kf, "Desktop Entry", "Comment", NULL, NULL);
+        if(str) {
+          setDescription(QString::fromUtf8(str));
+          g_free(str);
+        }
+        str = g_key_file_get_locale_string(kf, "Desktop Entry", "Icon", NULL, NULL);
+        if(str) {
+          setIconName(QString::fromUtf8(str));
+          g_free(str);
+        }
+      }
+      g_free(type);
+    }
+  }
+  g_key_file_free(kf);
+  return true;
 }

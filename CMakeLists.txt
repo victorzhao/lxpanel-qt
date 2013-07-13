@@ -120,7 +120,7 @@ qt4_wrap_ui(lximage_qt_UI_H
 
 add_definitions(
   -DLXPANEL_LIB_DIR="${CMAKE_INSTALL_FULL_LIBDIR}/lxpanel-qt"
-  -DLXPANEL_DATA_DIR="${CMAKE_INSTALL_FULL_DATADIR} /lxpanel-qt"
+  -DLXPANEL_DATA_DIR="${CMAKE_INSTALL_FULL_DATADIR}/lxpanel-qt"
   -DLIBFM_QT_API=Q_DECL_IMPORT # fix the problem of libfm-qt
 )
 
@@ -165,8 +165,15 @@ target_link_libraries(battery
 
 set_target_properties(battery PROPERTIES PREFIX "")
 
+# install dynamic applets
 install(TARGETS battery
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/lxpanel-qt/applets
+)
+
+# install desktop entry files for the dynamic applets
+install(DIRECTORY
+  data/applets
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/lxpanel-qt
 )
 
 # install library headers

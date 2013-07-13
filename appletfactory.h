@@ -21,30 +21,84 @@
 #ifndef LXPANEL_APPLETFACTORY_H
 #define LXPANEL_APPLETFACTORY_H
 
+#include <QString>
+
 class QWidget;
 
 namespace Lxpanel {
 
 class Applet;
+class AppletInfo;
 
 // factory class used to generate new instances of applets
 class AppletFactory {
 
 public:
+  AppletFactory(QString id):
+    id_(id) {
+  }
+
   virtual Applet* create(QWidget* parent) = 0;
   virtual ~AppletFactory();
+
+  const QString id() const {
+    return id_;
+  }
+  void setId(const QString value) {
+    id_ = value;
+  }
+
+  const QString name() const {
+    return name_;
+  }
+  void setName(const QString value) {
+    name_ = value;
+  }
+
+  const QString description() const {
+    return description_;
+  }
+  void setDescription(const QString value) {
+    description_ = value;
+  }
+
+  const QString iconName() const {
+    return iconName_;
+  }
+  
+  void setIconName(const QString value) {
+    iconName_ = value;
+  }
+  
+  const QString author() const {
+    return author_;
+  }
+  void setAuthor(const QString value) {
+    author_ = value;
+  }
+
+private:
+  QString id_;
+  QString name_;
+  QString description_;
+  QString iconName_;
+  QString author_;
 };
 
 }
 
-#define LXPANEL_DECLARE_BUILTIN_APPLET(appletClass) \
+#define LXPANEL_DECLARE_BUILTIN_APPLET(appletClass, id, name, desc) \
 namespace Lxpanel { \
 class appletClass##Factory: public AppletFactory { \
 public: \
-  appletClass##Factory() {} \
+  appletClass##Factory(): \
+    AppletFactory(id) { \
+    setName(name); \
+    setDescription(desc); \
+  } \
   virtual ~appletClass##Factory() {} \
   virtual Applet* create(QWidget* parent) { \
-    return new appletClass(parent); \
+    return new appletClass(this, parent); \
   } \
 }; \
 };

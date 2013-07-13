@@ -33,7 +33,7 @@ class LauncherApplet : public Applet {
   Q_OBJECT
   
 public:
-  explicit LauncherApplet(QWidget* parent = 0);
+  explicit LauncherApplet(AppletFactory* factory, QWidget* parent = 0);
   virtual ~LauncherApplet();
   
   virtual QWidget* widget() {

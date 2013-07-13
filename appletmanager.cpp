@@ -36,16 +36,16 @@
 
 using namespace Lxpanel;
 
-LXPANEL_DECLARE_BUILTIN_APPLET(AppMenuApplet)
-LXPANEL_DECLARE_BUILTIN_APPLET(ClockApplet)
-LXPANEL_DECLARE_BUILTIN_APPLET(LauncherApplet)
-LXPANEL_DECLARE_BUILTIN_APPLET(ShowDesktopApplet)
-LXPANEL_DECLARE_BUILTIN_APPLET(NetStatusApplet)
-LXPANEL_DECLARE_BUILTIN_APPLET(BlankApplet)
-LXPANEL_DECLARE_BUILTIN_APPLET(PagerApplet)
-LXPANEL_DECLARE_BUILTIN_APPLET(TaskApplet)
-LXPANEL_DECLARE_BUILTIN_APPLET(SysTrayApplet)
-LXPANEL_DECLARE_BUILTIN_APPLET(VolumeApplet)
+LXPANEL_DECLARE_BUILTIN_APPLET(AppMenuApplet, "appmenu", QObject::tr("Application menu"), "")
+LXPANEL_DECLARE_BUILTIN_APPLET(ClockApplet, "clock", QObject::tr("Clock"), "")
+LXPANEL_DECLARE_BUILTIN_APPLET(LauncherApplet, "launcher", QObject::tr("Application Launcher"), QObject::tr("Launch applications"))
+LXPANEL_DECLARE_BUILTIN_APPLET(ShowDesktopApplet, "showdesktop", QObject::tr("Show desktop"), "")
+LXPANEL_DECLARE_BUILTIN_APPLET(NetStatusApplet, "netstatus", QObject::tr("Network status monitor"), "")
+LXPANEL_DECLARE_BUILTIN_APPLET(BlankApplet, "blank", QObject::tr("Blank space"), "")
+LXPANEL_DECLARE_BUILTIN_APPLET(PagerApplet, "pager", QObject::tr("Pager"), QObject::tr("Switch among different desktops"))
+LXPANEL_DECLARE_BUILTIN_APPLET(TaskApplet, "task", QObject::tr("Task list"), QObject::tr("Task buttons"))
+LXPANEL_DECLARE_BUILTIN_APPLET(SysTrayApplet, "systray", QObject::tr("System tray (notification area)"), "")
+LXPANEL_DECLARE_BUILTIN_APPLET(VolumeApplet, "volume", QObject::tr("Volume controller"), QObject::tr("Adjust volume"))
 
 AppletManager::AppletManager() {
 
@@ -57,26 +57,50 @@ AppletManager::~AppletManager() {
 
 void AppletManager::init() {
   // register built-in applets
-  knownApplets_.insert("appmenu", new AppMenuAppletFactory());
-  knownApplets_.insert("clock", new ClockAppletFactory());
-  knownApplets_.insert("showdesktop", new ShowDesktopAppletFactory());
-  knownApplets_.insert("launcher", new LauncherAppletFactory());
-  knownApplets_.insert("netstatus", new NetStatusAppletFactory());
-  knownApplets_.insert("blank", new BlankAppletFactory());
-  knownApplets_.insert("pager", new PagerAppletFactory());
-  knownApplets_.insert("task", new TaskAppletFactory());
-  knownApplets_.insert("systray", new SysTrayAppletFactory());
-  knownApplets_.insert("volume", new VolumeAppletFactory());
+  AppletFactory* factory;
+  factory = new AppMenuAppletFactory();
+  knownApplets_.insert(factory->id(), factory);
 
-  // find dynamic applets modules from module dirs
+  factory = new ClockAppletFactory();
+  knownApplets_.insert(factory->id(), factory);
+
+  factory = new ShowDesktopAppletFactory();
+  knownApplets_.insert(factory->id(), factory);
+
+  factory = new LauncherAppletFactory();
+  knownApplets_.insert(factory->id(), factory);
+
+  factory = new NetStatusAppletFactory();
+  knownApplets_.insert(factory->id(), factory);
+  
+  factory = new BlankAppletFactory();
+  knownApplets_.insert(factory->id(), factory);
+
+  factory = new PagerAppletFactory();
+  knownApplets_.insert(factory->id(), factory);
+
+  factory = new TaskAppletFactory();
+  knownApplets_.insert(factory->id(), factory);
+  
+  factory = new SysTrayAppletFactory();
+  knownApplets_.insert(factory->id(), factory);
+  
+  factory = new VolumeAppletFactory();
+  knownApplets_.insert(factory->id(), factory);
+
+  // Find dynamically loaded applets
+  // By default, load the deaktop entry files from /usr/share/lxpanel-qt/applets
   QDir dir;
-  dir.cd(QString(LXPANEL_LIB_DIR) + "/applets");
+  dir.cd(LXPANEL_DATA_DIR "/applets");
+  qDebug("loading: %s", LXPANEL_DATA_DIR "/applets");
   QStringList files = dir.entryList();
   Q_FOREACH(QString file, files) {
-    if(file[0] != '.' && file.endsWith(".so")) {
-      QString name = file.left(file.length() - 3);
-      AppletFactory* factory = new AppletPluginFactory(dir.absoluteFilePath(file));
-      knownApplets_.insert(name, factory);
+    if(file[0] != '.' && file.endsWith(".desktop")) {
+      qDebug("find applet: %s", qPrintable(file));
+      QString id = file.left(file.length() - 8);
+      QString soPath = LXPANEL_LIB_DIR "/applets/" + id + ".so";
+      AppletPluginFactory* factory = new AppletPluginFactory(id, soPath, dir.absoluteFilePath(file));
+      knownApplets_.insert(factory->id(), factory);
     }
   }
 }

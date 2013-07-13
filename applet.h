@@ -26,14 +26,16 @@
 
 namespace Lxpanel {
 
+class AppletFactory;
+  
 class Applet : public QObject {
 
 Q_OBJECT
 
 public:
-  explicit Applet(QWidget* parent = 0);
+  explicit Applet(AppletFactory* factory, QWidget* parent = 0);
   virtual ~Applet();
-  
+
   virtual QWidget* widget() = 0;
 
   virtual void setPanelIconSize(int size) {
@@ -61,8 +63,13 @@ public:
   virtual void preferences() {
   }
 
+  AppletFactory* factory() {
+    return factory_;
+  }
+
 private:
   bool expand_;
+  AppletFactory* factory_;
 };
 
 }

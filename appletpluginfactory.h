@@ -33,9 +33,12 @@ class AppletPlugin;
 class AppletPluginFactory : public AppletFactory {
 
 public:
-  AppletPluginFactory(QString filename);
+  AppletPluginFactory(QString id, QString moduleFile, QString desktopFile);
   virtual ~AppletPluginFactory();
   virtual Applet* create(QWidget* parent);
+
+  // load information about this applet from desktop entry file
+  bool loadInfo(QString desktopFile);
 
 private:
   QString moduleFile_;

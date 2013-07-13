@@ -19,10 +19,12 @@
 
 
 #include "applet.h"
+#include "appletfactory.h"
 
 using namespace Lxpanel;
 
-Applet::Applet(QWidget* parent):
+Applet::Applet(AppletFactory* factory, QWidget* parent):
+  factory_(factory),
   expand_(false) {
 
 }

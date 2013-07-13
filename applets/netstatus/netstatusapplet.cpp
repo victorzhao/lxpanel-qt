@@ -24,8 +24,8 @@
 
 using namespace Lxpanel;
 
-NetStatusApplet::NetStatusApplet(QWidget* parent):
-  Applet(),
+NetStatusApplet::NetStatusApplet(AppletFactory* factory, QWidget* parent):
+  Applet(factory, parent),
   timer_(),
   last_rx(0),
   last_tx(0),

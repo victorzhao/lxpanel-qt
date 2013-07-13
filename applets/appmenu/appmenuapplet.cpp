@@ -54,12 +54,12 @@ private:
   MenuCacheItem* item_;
 };
 
-AppMenuApplet::AppMenuApplet(QWidget* parent):
-  Applet(parent),
+AppMenuApplet::AppMenuApplet(AppletFactory* factory, QWidget* parent):
+  Applet(factory, parent),
   button_(new QPushButton()),
   menu_(NULL) {
 
-  button_->setText("Start");
+  // button_->setText("Applications");
   button_->setIcon(QIcon::fromTheme("start-here"));
   button_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 

@@ -28,7 +28,7 @@ namespace Lxpanel {
 class BlankApplet : public Lxpanel::Applet {
 
 public:
-  explicit BlankApplet(QWidget* parent = 0);
+  explicit BlankApplet(AppletFactory* factory, QWidget* parent = 0);
   virtual ~BlankApplet();
   virtual QWidget* widget() {
     return widget_;

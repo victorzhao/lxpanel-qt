@@ -26,7 +26,9 @@
 
 using namespace Lxpanel;
 
-ShowDesktopApplet::ShowDesktopApplet(QWidget* parent): Applet(parent) {
+ShowDesktopApplet::ShowDesktopApplet(AppletFactory* factory, QWidget* parent):
+  Applet(factory, parent) {
+
   button_ = new QToolButton(parent);
   button_->setToolTip(tr("Show desktop"));
   button_->setText(tr("Show desktop"));
