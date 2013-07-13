@@ -23,12 +23,12 @@
 
 #include <QObject>
 #include <QHash>
-#include "appletfactory.h"
+#include "appletinfo.h"
 
 namespace Lxpanel {
 
 class Applet;
-class AppletFactory;
+class AppletInfo;
 
 class AppletManager : public QObject {
   Q_OBJECT
@@ -41,7 +41,7 @@ public:
   void destroyApplet(Applet* applet);
 
 private:
-  QHash<QString, AppletFactory*> knownApplets_;
+  QHash<QString, AppletInfo*> knownApplets_;
 };
 
 }

@@ -48,7 +48,7 @@ public:
   virtual QWidget* widget() {
     return button_;
   }
-  explicit VolumeApplet(AppletFactory* factory, QWidget* parent = 0);
+  explicit VolumeApplet(AppletInfo* info, QWidget* parent = 0);
   virtual void setPanelIconSize(int size);
   virtual bool loadSettings(QDomElement& element);
   virtual bool saveSettings(QDomElement& element);

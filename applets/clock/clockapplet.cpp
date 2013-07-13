@@ -52,8 +52,8 @@ void ClockLabel::mousePressEvent(QMouseEvent* event) {
 }
 
 
-ClockApplet::ClockApplet(AppletFactory* factory, QWidget* parent):
-  Applet(factory, parent) {
+ClockApplet::ClockApplet(AppletInfo* info, QWidget* parent):
+  Applet(info, parent) {
 
   label_ = new ClockLabel(parent);
   label_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);

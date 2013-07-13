@@ -18,11 +18,33 @@
 */
 
 
-#include "appletfactory.h"
+#ifndef LXPANEL_APPLETPLUGINFACTORY_H
+#define LXPANEL_APPLETPLUGINFACTORY_H
 
-using namespace Lxpanel;
+#include <QtPlugin>
+#include "appletinfo.h"
+#include "appletplugin.h"
 
-AppletFactory::~AppletFactory() {
+namespace Lxpanel {
+
+class AppletPlugin;
+
+// class used to load dynamic modules on demand and generate new applet instances
+class AppletPluginInfo : public AppletInfo {
+
+public:
+  AppletPluginInfo(QString id, QString moduleFile, QString desktopFile);
+  virtual ~AppletPluginInfo();
+  virtual Applet* create(QWidget* parent);
+
+  // load information about this applet from desktop entry file
+  bool loadInfo(QString desktopFile);
+
+private:
+  QString moduleFile_;
+  AppletPlugin* plugin_;
+};
 
 }
 
+#endif // LXPANEL_APPLETPLUGINFACTORY_H

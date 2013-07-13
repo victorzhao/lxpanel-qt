@@ -26,7 +26,7 @@
 
 namespace Lxpanel {
 
-class AppletFactory;
+class AppletInfo;
   
 // abstract class which should be implemented by every dynamic applet plugins
 // p.s: built-in applets do not need to implement this.
@@ -34,7 +34,7 @@ class AppletPlugin {
 public:
 
   virtual ~AppletPlugin();
-  virtual Applet* create(AppletFactory* factory, QWidget* parent) = 0;
+  virtual Applet* create(AppletInfo* info, QWidget* parent) = 0;
 };
 
 };

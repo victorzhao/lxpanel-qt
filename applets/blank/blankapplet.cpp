@@ -22,8 +22,8 @@
 
 using namespace Lxpanel;
 
-BlankApplet::BlankApplet(AppletFactory* factory, QWidget* parent):
-  Applet(factory, parent),
+BlankApplet::BlankApplet(AppletInfo* info, QWidget* parent):
+  Applet(info, parent),
   size_(4),
   widget_(new QWidget(parent)) {
 }

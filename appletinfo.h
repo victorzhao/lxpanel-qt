@@ -28,18 +28,17 @@ class QWidget;
 namespace Lxpanel {
 
 class Applet;
-class AppletInfo;
 
 // factory class used to generate new instances of applets
-class AppletFactory {
+class AppletInfo {
 
 public:
-  AppletFactory(QString id):
+  AppletInfo(QString id):
     id_(id) {
   }
 
   virtual Applet* create(QWidget* parent) = 0;
-  virtual ~AppletFactory();
+  virtual ~AppletInfo();
 
   const QString id() const {
     return id_;
@@ -86,21 +85,5 @@ private:
 };
 
 }
-
-#define LXPANEL_DECLARE_BUILTIN_APPLET(appletClass, id, name, desc) \
-namespace Lxpanel { \
-class appletClass##Factory: public AppletFactory { \
-public: \
-  appletClass##Factory(): \
-    AppletFactory(id) { \
-    setName(name); \
-    setDescription(desc); \
-  } \
-  virtual ~appletClass##Factory() {} \
-  virtual Applet* create(QWidget* parent) { \
-    return new appletClass(this, parent); \
-  } \
-}; \
-};
 
 #endif // LXPANEL_APPLETFACTORY_H

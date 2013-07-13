@@ -33,7 +33,7 @@
 namespace Lxpanel {
   
 class Panel;
-class AppletFactory;
+class AppletInfo;
 
 class RunDialog;
 

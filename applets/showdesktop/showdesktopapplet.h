@@ -20,7 +20,7 @@
 #ifndef LXPANEL_SHOWDESKTOPAPPLET_H
 #define LXPANEL_SHOWDESKTOPAPPLET_H
 
-#include "../../appletfactory.h"
+#include "../../appletinfo.h"
 #include "../../applet.h"
 
 #include <QToolButton>
@@ -31,7 +31,7 @@ class ShowDesktopApplet : public Applet {
   Q_OBJECT
 
 public:
-  explicit ShowDesktopApplet(AppletFactory* factory, QWidget* parent = 0);
+  explicit ShowDesktopApplet(AppletInfo* info, QWidget* parent = 0);
   virtual ~ShowDesktopApplet();
   
   QWidget* widget() {

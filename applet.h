@@ -26,14 +26,14 @@
 
 namespace Lxpanel {
 
-class AppletFactory;
+class AppletInfo;
   
 class Applet : public QObject {
 
 Q_OBJECT
 
 public:
-  explicit Applet(AppletFactory* factory, QWidget* parent = 0);
+  explicit Applet(AppletInfo* info, QWidget* parent = 0);
   virtual ~Applet();
 
   virtual QWidget* widget() = 0;
@@ -63,13 +63,13 @@ public:
   virtual void preferences() {
   }
 
-  AppletFactory* factory() {
-    return factory_;
+  AppletInfo* info() {
+    return info_;
   }
 
 private:
   bool expand_;
-  AppletFactory* factory_;
+  AppletInfo* info_;
 };
 
 }

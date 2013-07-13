@@ -70,8 +70,8 @@ set(lxpanel_qt_SRCS
   applet.cpp
   appletmanager.cpp
   appletplugin.cpp
-  appletfactory.cpp
-  appletpluginfactory.cpp
+  appletinfo.cpp
+  appletplugininfo.cpp
   popup.cpp
   # preferences
   preferencesdialog.cpp

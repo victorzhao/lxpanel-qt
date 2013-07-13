@@ -30,8 +30,8 @@
 
 using namespace Lxpanel;
 
-PagerApplet::PagerApplet(AppletFactory* factory, QWidget* parent):
-  Applet(factory, parent),
+PagerApplet::PagerApplet(AppletInfo* info, QWidget* parent):
+  Applet(info, parent),
   desktopCount_(0),
   currentDesktop_(0),
   layout_(new QBoxLayout(QBoxLayout::LeftToRight)),

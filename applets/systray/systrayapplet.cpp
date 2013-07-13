@@ -23,8 +23,8 @@
 
 using namespace Lxpanel;
 
-SysTrayApplet::SysTrayApplet(AppletFactory* factory, QWidget* parent):
-  Applet(factory, parent),
+SysTrayApplet::SysTrayApplet(AppletInfo* info, QWidget* parent):
+  Applet(info, parent),
   tray_(new RazorTray(parent)) {
 
   Application* app = static_cast<Application*>(qApp);

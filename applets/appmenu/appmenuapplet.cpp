@@ -54,8 +54,8 @@ private:
   MenuCacheItem* item_;
 };
 
-AppMenuApplet::AppMenuApplet(AppletFactory* factory, QWidget* parent):
-  Applet(factory, parent),
+AppMenuApplet::AppMenuApplet(AppletInfo* info, QWidget* parent):
+  Applet(info, parent),
   button_(new QPushButton()),
   menu_(NULL) {
 

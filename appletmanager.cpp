@@ -22,7 +22,7 @@
 #include <QDir>
 
 // built-in applets
-#include "appletpluginfactory.h"
+#include "appletplugininfo.h"
 #include "applets/appmenu/appmenuapplet.h"
 #include "applets/clock/clockapplet.h"
 #include "applets/showdesktop/showdesktopapplet.h"
@@ -35,6 +35,22 @@
 #include "applets/volume/volumeapplet.h"
 
 using namespace Lxpanel;
+
+#define LXPANEL_DECLARE_BUILTIN_APPLET(appletClass, id, name, desc) \
+namespace Lxpanel { \
+class appletClass##Info: public AppletInfo { \
+public: \
+  appletClass##Info(): \
+    AppletInfo(id) { \
+    setName(name); \
+    setDescription(desc); \
+  } \
+  virtual ~appletClass##Info() {} \
+  virtual Applet* create(QWidget* parent) { \
+    return new appletClass(this, parent); \
+  } \
+}; \
+};
 
 LXPANEL_DECLARE_BUILTIN_APPLET(AppMenuApplet, "appmenu", QObject::tr("Application menu"), "")
 LXPANEL_DECLARE_BUILTIN_APPLET(ClockApplet, "clock", QObject::tr("Clock"), "")
@@ -57,36 +73,36 @@ AppletManager::~AppletManager() {
 
 void AppletManager::init() {
   // register built-in applets
-  AppletFactory* factory;
-  factory = new AppMenuAppletFactory();
-  knownApplets_.insert(factory->id(), factory);
+  AppletInfo* info;
+  info = new AppMenuAppletInfo();
+  knownApplets_.insert(info->id(), info);
 
-  factory = new ClockAppletFactory();
-  knownApplets_.insert(factory->id(), factory);
+  info = new ClockAppletInfo();
+  knownApplets_.insert(info->id(), info);
 
-  factory = new ShowDesktopAppletFactory();
-  knownApplets_.insert(factory->id(), factory);
+  info = new ShowDesktopAppletInfo();
+  knownApplets_.insert(info->id(), info);
 
-  factory = new LauncherAppletFactory();
-  knownApplets_.insert(factory->id(), factory);
+  info = new LauncherAppletInfo();
+  knownApplets_.insert(info->id(), info);
 
-  factory = new NetStatusAppletFactory();
-  knownApplets_.insert(factory->id(), factory);
+  info = new NetStatusAppletInfo();
+  knownApplets_.insert(info->id(), info);
   
-  factory = new BlankAppletFactory();
-  knownApplets_.insert(factory->id(), factory);
+  info = new BlankAppletInfo();
+  knownApplets_.insert(info->id(), info);
 
-  factory = new PagerAppletFactory();
-  knownApplets_.insert(factory->id(), factory);
+  info = new PagerAppletInfo();
+  knownApplets_.insert(info->id(), info);
 
-  factory = new TaskAppletFactory();
-  knownApplets_.insert(factory->id(), factory);
+  info = new TaskAppletInfo();
+  knownApplets_.insert(info->id(), info);
   
-  factory = new SysTrayAppletFactory();
-  knownApplets_.insert(factory->id(), factory);
+  info = new SysTrayAppletInfo();
+  knownApplets_.insert(info->id(), info);
   
-  factory = new VolumeAppletFactory();
-  knownApplets_.insert(factory->id(), factory);
+  info = new VolumeAppletInfo();
+  knownApplets_.insert(info->id(), info);
 
   // Find dynamically loaded applets
   // By default, load the deaktop entry files from /usr/share/lxpanel-qt/applets
@@ -99,16 +115,16 @@ void AppletManager::init() {
       qDebug("find applet: %s", qPrintable(file));
       QString id = file.left(file.length() - 8);
       QString soPath = LXPANEL_LIB_DIR "/applets/" + id + ".so";
-      AppletPluginFactory* factory = new AppletPluginFactory(id, soPath, dir.absoluteFilePath(file));
-      knownApplets_.insert(factory->id(), factory);
+      AppletPluginInfo* info = new AppletPluginInfo(id, soPath, dir.absoluteFilePath(file));
+      knownApplets_.insert(info->id(), info);
     }
   }
 }
 
 Applet* AppletManager::createApplet(QString typeName) {
-  AppletFactory* appletFactory = knownApplets_.value(typeName, NULL);
-  if(appletFactory)
-    return appletFactory->create(NULL);
+  AppletInfo* appletInfo = knownApplets_.value(typeName, NULL);
+  if(appletInfo)
+    return appletInfo->create(NULL);
   return NULL;
 }
 

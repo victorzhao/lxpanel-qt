@@ -35,7 +35,7 @@ public:
   virtual QWidget* widget() {
     return iconLabel_;
   }
-  explicit NetStatusApplet(AppletFactory* factory, QWidget* parent = 0);
+  explicit NetStatusApplet(AppletInfo* info, QWidget* parent = 0);
   virtual ~NetStatusApplet();
   virtual bool loadSettings(QDomElement& element);
   virtual bool saveSettings(QDomElement& element);

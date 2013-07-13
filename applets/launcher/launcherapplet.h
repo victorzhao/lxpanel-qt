@@ -25,7 +25,7 @@
 #include <QBoxLayout>
 
 #include "../../applet.h"
-#include "../../appletfactory.h"
+#include "../../appletinfo.h"
 
 namespace Lxpanel {
 
@@ -33,7 +33,7 @@ class LauncherApplet : public Applet {
   Q_OBJECT
   
 public:
-  explicit LauncherApplet(AppletFactory* factory, QWidget* parent = 0);
+  explicit LauncherApplet(AppletInfo* info, QWidget* parent = 0);
   virtual ~LauncherApplet();
   
   virtual QWidget* widget() {

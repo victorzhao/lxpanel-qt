@@ -20,7 +20,7 @@
 
 #include "panel.h"
 #include "applet.h"
-#include "appletfactory.h"
+#include "appletinfo.h"
 #include "application.h"
 
 #include <QApplication>

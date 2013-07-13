@@ -21,7 +21,7 @@
 #include "preferencesdialog.h"
 #include "panel.h"
 #include "applet.h"
-#include "appletfactory.h"
+#include "appletinfo.h"
 
 using namespace Lxpanel;
 
@@ -79,9 +79,9 @@ void PreferencesDialog::initAppearancePage() {
 void PreferencesDialog::initAppletsPage() {
   // TODO: load applet info here and use a more meaningful display name here.
   Q_FOREACH(Applet* applet, panel_->applets()) {
-    AppletFactory* factory = applet->factory();
-    QStandardItem* item = new QStandardItem(factory->name());
-    qDebug("%s, %s", qPrintable(factory->name()), applet->metaObject()->className());
+    AppletInfo* info = applet->info();
+    QStandardItem* item = new QStandardItem(info->name());
+    qDebug("%s, %s", qPrintable(info->name()), applet->metaObject()->className());
     item->setEditable(false);
     item->setData(qVariantFromValue<void*>(applet));
     appletsModel_->appendRow(item);

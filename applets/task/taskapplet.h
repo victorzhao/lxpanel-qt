@@ -36,7 +36,7 @@ class TaskApplet : public Applet {
   Q_OBJECT
 public:
 
-  TaskApplet(AppletFactory* factory, QWidget* parent);
+  TaskApplet(AppletInfo* info, QWidget* parent);
   ~TaskApplet();
 
   virtual QWidget* widget() {

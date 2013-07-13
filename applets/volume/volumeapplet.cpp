@@ -27,8 +27,8 @@
 
 using namespace Lxpanel;
 
-VolumeApplet::VolumeApplet(AppletFactory* factory, QWidget* parent):
-  Applet(factory, parent),
+VolumeApplet::VolumeApplet(AppletInfo* info, QWidget* parent):
+  Applet(info, parent),
   volume_(0),
   muted_(false),
   popup_(NULL),

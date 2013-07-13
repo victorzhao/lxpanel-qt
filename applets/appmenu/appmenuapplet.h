@@ -25,7 +25,7 @@
 #include <menu-cache/menu-cache.h>
 
 #include "../../applet.h"
-#include "../../appletfactory.h"
+#include "../../appletinfo.h"
 #include "../../appletplugin.h"
 
 class QMenu;
@@ -36,7 +36,7 @@ class AppMenuApplet: public Applet {
   Q_OBJECT
 
 public:
-  explicit AppMenuApplet(AppletFactory* factory, QWidget* parent = 0);
+  explicit AppMenuApplet(AppletInfo* info, QWidget* parent = 0);
   virtual ~AppMenuApplet();
 
   QWidget* widget() {

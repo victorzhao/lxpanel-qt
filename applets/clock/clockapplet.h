@@ -20,7 +20,7 @@
 #ifndef LXPANEL_CLOCKAPPLET_H
 #define LXPANEL_CLOCKAPPLET_H
 
-#include "../../appletfactory.h"
+#include "../../appletinfo.h"
 #include "../../applet.h"
 
 #include <QLabel>
@@ -48,7 +48,7 @@ class ClockApplet : public Applet {
   Q_OBJECT
 
 public:
-  explicit ClockApplet(AppletFactory* factory, QWidget* parent = 0);
+  explicit ClockApplet(AppletInfo* info, QWidget* parent = 0);
   virtual ~ClockApplet();
 
   QWidget* widget() {

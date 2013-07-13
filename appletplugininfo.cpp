@@ -18,24 +18,24 @@
 */
 
 
-#include "appletpluginfactory.h"
+#include "appletplugininfo.h"
 #include <QPluginLoader>
 #include <glib.h>
 
 using namespace Lxpanel;
 
-AppletPluginFactory::AppletPluginFactory(QString id, QString moduleFile, QString desktopFile):
-  AppletFactory(id),
+AppletPluginInfo::AppletPluginInfo(QString id, QString moduleFile, QString desktopFile):
+  AppletInfo(id),
   plugin_(NULL),
   moduleFile_(moduleFile) {
   loadInfo(desktopFile);
 }
 
-AppletPluginFactory::~AppletPluginFactory() {
+AppletPluginInfo::~AppletPluginInfo() {
 
 }
 
-Applet* AppletPluginFactory::create(QWidget* parent) {
+Applet* AppletPluginInfo::create(QWidget* parent) {
   Applet* applet = NULL;
   if(!plugin_) { // if the plugin is not yet loaded
     QPluginLoader loader(moduleFile_);
@@ -48,7 +48,7 @@ Applet* AppletPluginFactory::create(QWidget* parent) {
   return applet;
 }
 
-bool AppletPluginFactory::loadInfo(QString desktopFile) {
+bool AppletPluginInfo::loadInfo(QString desktopFile) {
   // glib GKeyFile supports localized key values while QSettings does not.
   GKeyFile* kf = g_key_file_new();
   if(g_key_file_load_from_file(kf, desktopFile.toLocal8Bit().constData(), GKeyFileFlags(0), NULL)) {

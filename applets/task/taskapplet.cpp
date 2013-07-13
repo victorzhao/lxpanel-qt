@@ -25,8 +25,8 @@
 
 using namespace Lxpanel;
 
-TaskApplet::TaskApplet(AppletFactory* factory, QWidget* parent):
-  Applet(factory, parent),
+TaskApplet::TaskApplet(AppletInfo* info, QWidget* parent):
+  Applet(info, parent),
   layout_(new QBoxLayout(QBoxLayout::LeftToRight)),
   buttonGroup_(new QButtonGroup()),
   widget_(new QWidget(parent)) {
