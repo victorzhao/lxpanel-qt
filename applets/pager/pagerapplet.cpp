@@ -62,6 +62,10 @@ PagerApplet::~PagerApplet() {
   delete frame_;
 }
 
+QWidget* PagerApplet::widget() {
+  return frame_;
+}
+
 void PagerApplet::reloadButtons() {
   // remove all existing buttons
   Q_FOREACH(QAbstractButton* oldBtn, group_->buttons()) {

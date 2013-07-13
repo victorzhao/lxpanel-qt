@@ -28,6 +28,8 @@
 
 namespace Lxpanel {
 
+class PreferencesDialog;
+
 enum SizeMode {
   SizeModeAuto,
   SizeModePercent,
@@ -42,6 +44,7 @@ enum Position {
 };
 
 class Applet;
+class PreferencesDialog;
 
 class Panel : public QWidget {
   Q_OBJECT
@@ -184,6 +187,8 @@ Q_SIGNALS:
 private Q_SLOTS:
 
   void onGeometryChanged();
+  void editPreferences();
+  void addApplet();
 
 private:
 
@@ -209,6 +214,8 @@ private:
   bool pendingGeometryChanged_;
   QBoxLayout* layout_;
   QList<Applet*> applets_;
+  
+  PreferencesDialog* prefDlg_;
 };
 
 }

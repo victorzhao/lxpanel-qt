@@ -28,6 +28,7 @@
 #include <QTimer>
 #include <QSpacerItem>
 #include <QMenu>
+#include <QContextMenuEvent>
 #include "preferencesdialog.h"
 
 #include <QX11Info>
@@ -42,6 +43,7 @@ Panel::Panel():
   thickness_(26),
   length_(100),
   lengthMode_(SizeModeAuto),
+  prefDlg_(NULL),
   QWidget(0) {
 
   setWindowFlags(windowFlags()|Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
@@ -140,14 +142,57 @@ void Panel::moveEvent(QMoveEvent* event) {
   }
 }
 
+// if contextMenuEvent() handler is not defined in applets
+// the event will be delivered to the panel instead
 void Panel::contextMenuEvent(QContextMenuEvent* event) {
   QWidget::contextMenuEvent(event);
 
-  // QMenu* popup = new QMenu();
+  Applet* currentApplet = NULL;
+  // check which applet our mouse cursor is currently in.
+  Q_FOREACH(Applet* applet, applets_) {
+    QWidget* widget = applet->widget();
+    QRect rect = widget->geometry();
+    if(rect.contains(event->pos())) {
+      currentApplet = applet;
+      break;
+    }
+  }
+
+  QMenu popup;
+  QAction* action;
+  if(currentApplet) {
+    // add menu items for this applet
+    currentApplet->customizeContextMenu(&popup);
+    // popup.addAction(tr("Remove Applet \"%1\"").arg(currentApplet->info()->name()));
+  }
+
+  if(!popup.isEmpty())
+    popup.addSeparator();
+
+  action = popup.addAction(tr("Add Applet"));
+  connect(action, SIGNAL(triggered(bool)), SLOT(addApplet()));
+
+  action = popup.addAction(tr("Panel preferences"));
+  connect(action, SIGNAL(triggered(bool)), SLOT(editPreferences()));
+  popup.exec(event->globalPos());
+}
+
+void Panel::addApplet() {
+
+}
+
+void Panel::editPreferences() {
+  /*
+  if(!prefDlg_) {
+    prefDlg_ = new PreferencesDialog(this);
+    prefDlg_->show();
+  }
+  else
+    prefDlg_->raise();
+  */
   PreferencesDialog dlg(this);
   dlg.exec();
 }
-
 
 void Panel::onGeometryChanged() {
   // qDebug("onGeometryChanged: %s", qPrintable(objectName()));

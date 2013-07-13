@@ -44,29 +44,26 @@ TaskButton::~TaskButton() {
 }
 
 void TaskButton::contextMenuEvent(QContextMenuEvent* event) {
-  QWidget::contextMenuEvent(event);
-  
+  event->accept();
   // create a context menu for the button
-  QMenu* menu = new QMenu();
-  QAction* action = menu->addAction(tr("Send &To"), this, SLOT(onSendToDesktop()));
-  action = menu->addAction(tr("Send To Current &Desktop"), this, SLOT(onSendToCurrentDesktop()));
-  menu->addSeparator();
-  action = menu->addAction(tr("Ma&ximize"), this, SLOT(onMaximize()));
-  action = menu->addAction(tr("&Restore"), this, SLOT(onRestore()));
-  action = menu->addAction(tr("Mi&nimize"), this, SLOT(onMinimize()));
-  action = menu->addAction(tr("&Shade"), this, SLOT(onShade()));
-  action = menu->addAction(tr("&Move"), this, SLOT(onMove()));
-  action = menu->addAction(tr("Resi&ze"), this, SLOT(onResize()));
-  menu->addSeparator();
-  action = menu->addAction(tr("&Layer"));
-  menu->addSeparator();
-  action = menu->addAction(tr("&Close"), this, SLOT(onClose()));
+  QMenu menu;
+  QAction* action = menu.addAction(tr("Send &To"), this, SLOT(onSendToDesktop()));
+  action = menu.addAction(tr("Send To Current &Desktop"), this, SLOT(onSendToCurrentDesktop()));
+  menu.addSeparator();
+  action = menu.addAction(tr("Ma&ximize"), this, SLOT(onMaximize()));
+  action = menu.addAction(tr("&Restore"), this, SLOT(onRestore()));
+  action = menu.addAction(tr("Mi&nimize"), this, SLOT(onMinimize()));
+  action = menu.addAction(tr("&Shade"), this, SLOT(onShade()));
+  action = menu.addAction(tr("&Move"), this, SLOT(onMove()));
+  action = menu.addAction(tr("Resi&ze"), this, SLOT(onResize()));
+  menu.addSeparator();
+  action = menu.addAction(tr("&Layer"));
+  menu.addSeparator();
+  action = menu.addAction(tr("&Close"), this, SLOT(onClose()));
 
-  connect(menu, SIGNAL(aboutToHide()), menu, SLOT(deleteLater()));
-  // FIXME: how to make the menu attached to the button perfectly?
   QPoint buttonPos = pos();
   buttonPos = parentWidget()->mapToGlobal(buttonPos);
-  menu->popup(buttonPos);
+  menu.exec(buttonPos);
 }
 
 void TaskButton::moveEvent(QMoveEvent* event) {

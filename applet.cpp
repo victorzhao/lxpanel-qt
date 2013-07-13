@@ -20,6 +20,7 @@
 
 #include "applet.h"
 #include "appletinfo.h"
+#include <QMenu>
 
 using namespace Lxpanel;
 
@@ -32,5 +33,15 @@ Applet::Applet(AppletInfo* info, QWidget* parent):
 Applet::~Applet() {
 
 }
+
+// set default context menu handling for the applet
+void Applet::customizeContextMenu(QMenu* menu) {
+  QAction* action = menu->addAction(tr("Configure \"%1\"").arg(info()->name()));
+  connect(action, SIGNAL(triggered(bool)), SLOT(preferences()));
+}
+
+void Applet::preferences() {
+}
+
 
 #include "applet.moc"

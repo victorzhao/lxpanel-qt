@@ -22,6 +22,7 @@
 #include "panel.h"
 #include "applet.h"
 #include "appletinfo.h"
+#include <QIcon>
 
 using namespace Lxpanel;
 
@@ -77,11 +78,12 @@ void PreferencesDialog::initAppearancePage() {
 }
 
 void PreferencesDialog::initAppletsPage() {
-  // TODO: load applet info here and use a more meaningful display name here.
   Q_FOREACH(Applet* applet, panel_->applets()) {
     AppletInfo* info = applet->info();
-    QStandardItem* item = new QStandardItem(info->name());
-    qDebug("%s, %s", qPrintable(info->name()), applet->metaObject()->className());
+    QIcon icon;
+    if(!info->iconName().isEmpty())
+      icon = QIcon::fromTheme(info->iconName());
+    QStandardItem* item = new QStandardItem(icon, info->name());
     item->setEditable(false);
     item->setData(qVariantFromValue<void*>(applet));
     appletsModel_->appendRow(item);

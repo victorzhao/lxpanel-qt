@@ -35,9 +35,7 @@ class PagerApplet : public Applet, XEventFilter {
 public:
   PagerApplet(AppletInfo* info, QWidget* parent = 0);
 
-  virtual QWidget* widget() {
-    return frame_;
-  }
+  virtual QWidget* widget();
   virtual ~PagerApplet();
   
   virtual bool expand() {

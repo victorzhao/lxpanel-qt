@@ -21,16 +21,17 @@
 #ifndef LXPANEL_APPLET_H
 #define LXPANEL_APPLET_H
 
-#include <QFrame>
+#include <QWidget>
 #include <QDomElement>
+
+class QMenu;
 
 namespace Lxpanel {
 
 class AppletInfo;
   
 class Applet : public QObject {
-
-Q_OBJECT
+  Q_OBJECT
 
 public:
   explicit Applet(AppletInfo* info, QWidget* parent = 0);
@@ -60,12 +61,14 @@ public:
     return true;
   }
 
-  virtual void preferences() {
-  }
-
   AppletInfo* info() {
     return info_;
   }
+
+  virtual void customizeContextMenu(QMenu* menu);
+
+public Q_SLOTS:
+  virtual void preferences();
 
 private:
   bool expand_;
