@@ -75,6 +75,8 @@ set(lxpanel_qt_SRCS
   popup.cpp
   # preferences
   preferencesdialog.cpp
+  # add applet dialog
+  addappletdialog.cpp
   # run dialog
   rundialog.cpp
   # xfitman taken from razor-qt
@@ -112,9 +114,10 @@ qt4_add_dbus_adaptor(lxpanel_qt_SRCS
 set(lxpanel_qt_UIS
   rundialog.ui
   preferences.ui
+  addapplet.ui
 )
 
-qt4_wrap_ui(lximage_qt_UI_H
+qt4_wrap_ui(lxpanel_qt_UI_H
   ${lxpanel_qt_UIS}
 )
 
@@ -126,7 +129,7 @@ add_definitions(
 
 add_executable(lxpanel-qt
   ${lxpanel_qt_SRCS}
-  ${lximage_qt_UI_H}
+  ${lxpanel_qt_UI_H}
 )
 
 target_link_libraries(lxpanel-qt

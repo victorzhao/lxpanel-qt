@@ -164,11 +164,12 @@ public:
   }
   void setIconSize(int size);
 
-protected:
-  bool loadApplet(QDomElement& element);
   void insertApplet(Lxpanel::Applet* applet, int index = -1);
   void reorderApplet(Applet* applet, int new_pos);
   void removeApplet(Applet* applet);
+
+protected:
+  bool loadApplet(QDomElement& element);
   void reserveScreenSpace(QRect* rect);
 
   virtual void resizeEvent(QResizeEvent* event);
@@ -184,11 +185,12 @@ Q_SIGNALS:
   // an applet is reordered
   void appletReordered(Applet* applet, int new_pos);
 
-private Q_SLOTS:
-
-  void onGeometryChanged();
+public Q_SLOTS:
   void editPreferences();
-  void addApplet();
+  Applet* addApplet();
+
+private Q_SLOTS:
+  void onGeometryChanged();
 
 private:
 

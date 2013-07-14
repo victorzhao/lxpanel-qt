@@ -41,6 +41,7 @@ ShowDesktopApplet::ShowDesktopApplet(AppletInfo* info, QWidget* parent):
 }
 
 ShowDesktopApplet::~ShowDesktopApplet() {
+  delete button_;
 }
 
 void ShowDesktopApplet::onButtonClicked() {

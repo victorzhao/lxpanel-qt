@@ -66,6 +66,7 @@ ClockApplet::ClockApplet(AppletInfo* info, QWidget* parent):
 ClockApplet::~ClockApplet() {
   timer_->stop();
   delete timer_;
+  delete label_;
 }
 
 void ClockApplet::onTimeout() {

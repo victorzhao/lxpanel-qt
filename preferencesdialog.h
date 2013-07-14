@@ -28,6 +28,7 @@
 namespace Lxpanel {
   
 class Panel;
+class Applet;
 
 class PreferencesDialog : public QDialog {
   Q_OBJECT
@@ -43,6 +44,8 @@ private:
   void initAppletsPage();
   void initAdvancedPage();
   void initGlobalPage();
+  
+  Applet* selectedApplet() const;
 
 private Q_SLOTS:
   void onScreenEdgeChanged(int value);
@@ -50,6 +53,12 @@ private Q_SLOTS:
   void onMarginChanged(int value);
   void onLengthChanged(int value);
   void onThicknessChanged(int value);
+  
+  void onAddApplet();
+  void onRemoveApplet();
+  void onAppletPref();
+  void onMoveUp();
+  void onMoveDown();
 
 private:
   Ui::PreferencesDialog ui;

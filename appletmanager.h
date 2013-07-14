@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QHash>
+#include <QList>
 #include "appletinfo.h"
 
 namespace Lxpanel {
@@ -39,6 +40,10 @@ public:
 
   Applet* createApplet(QString typeName);
   void destroyApplet(Applet* applet);
+
+  QList<AppletInfo*> applets() {
+    return knownApplets_.values();
+  }
 
 private:
   QHash<QString, AppletInfo*> knownApplets_;

@@ -30,6 +30,7 @@
 #include <QMenu>
 #include <QContextMenuEvent>
 #include "preferencesdialog.h"
+#include "addappletdialog.h"
 
 #include <QX11Info>
 #include <X11/Xlib.h>
@@ -169,16 +170,18 @@ void Panel::contextMenuEvent(QContextMenuEvent* event) {
   if(!popup.isEmpty())
     popup.addSeparator();
 
-  action = popup.addAction(tr("Add Applet"));
-  connect(action, SIGNAL(triggered(bool)), SLOT(addApplet()));
+  // action = popup.addAction(tr("Add Applet"));
+  // connect(action, SIGNAL(triggered(bool)), SLOT(addApplet()));
 
   action = popup.addAction(tr("Panel preferences"));
   connect(action, SIGNAL(triggered(bool)), SLOT(editPreferences()));
   popup.exec(event->globalPos());
 }
 
-void Panel::addApplet() {
-
+Applet* Panel::addApplet() {
+  AddAppletDialog dlg(this);
+  dlg.exec();
+  return NULL;
 }
 
 void Panel::editPreferences() {

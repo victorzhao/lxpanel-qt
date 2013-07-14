@@ -89,6 +89,12 @@ void PreferencesDialog::initAppletsPage() {
     appletsModel_->appendRow(item);
   }
   ui.appletsView->setModel(appletsModel_);
+  
+  connect(ui.addApplet, SIGNAL(clicked(bool)), SLOT(onAddApplet()));
+  connect(ui.removeApplet, SIGNAL(clicked(bool)), SLOT(onRemoveApplet()));
+  connect(ui.appletPref, SIGNAL(clicked(bool)), SLOT(onAppletPref()));
+  connect(ui.moveUp, SIGNAL(clicked(bool)), SLOT(onMoveUp()));
+  connect(ui.moveDown, SIGNAL(clicked(bool)), SLOT(onMoveDown()));
 }
 
 void PreferencesDialog::initAdvancedPage() {
@@ -125,4 +131,47 @@ void PreferencesDialog::onLengthChanged(int value) {
 
 void PreferencesDialog::onThicknessChanged(int value) {
   panel_->setThickness(value);
+}
+
+void PreferencesDialog::onAddApplet() {
+  Applet* applet = panel_->addApplet();
+  if(applet) {
+    
+  }
+}
+
+void PreferencesDialog::onRemoveApplet() {
+  Applet* applet = selectedApplet();
+  if(applet) {
+    panel_->removeApplet(applet);
+  }
+}
+
+Applet* PreferencesDialog::selectedApplet() const {
+  Applet* applet = NULL;
+  QModelIndex index = ui.appletsView->selectionModel()->selectedRows().first();
+  if(index.isValid()) {
+    QStandardItem* item = appletsModel_->itemFromIndex(index);
+    applet = reinterpret_cast<Applet*>(qVariantValue<void*>(item->data()));
+  }
+  return applet;
+}
+
+void PreferencesDialog::onAppletPref() {
+  Applet* applet = selectedApplet();
+  if(applet) {
+    applet->preferences();
+  }
+}
+
+void PreferencesDialog::onMoveUp() {
+  Applet* applet = selectedApplet();
+  if(applet) {
+  }
+}
+
+void PreferencesDialog::onMoveDown() {
+  Applet* applet = selectedApplet();
+  if(applet) {
+  }
 }
