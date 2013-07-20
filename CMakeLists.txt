@@ -124,7 +124,6 @@ qt4_wrap_ui(lxpanel_qt_UI_H
 add_definitions(
   -DLXPANEL_LIB_DIR="${CMAKE_INSTALL_FULL_LIBDIR}/lxpanel-qt"
   -DLXPANEL_DATA_DIR="${CMAKE_INSTALL_FULL_DATADIR}/lxpanel-qt"
-  -DLIBFM_QT_API=Q_DECL_IMPORT # fix the problem of libfm-qt
 )
 
 add_executable(lxpanel-qt
